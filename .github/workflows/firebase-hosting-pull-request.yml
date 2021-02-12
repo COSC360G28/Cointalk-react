@@ -12,8 +12,9 @@ jobs:
         with:
           node-version: "14"
       - run: npm install
-      - run: cd react-app
-      - run: npm run build
+      - run: cd react-app && npm install
+      - run: cd react-app && npm run build
+      - run:
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
