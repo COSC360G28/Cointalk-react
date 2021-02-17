@@ -16,7 +16,7 @@ export const CategorySelector = ({ selected, setSelected }) => {
   return (
     <div id="category-selector">
       {categories.map((category) => (
-        <div className="category-wrapper">
+        <div key={category.name} className="category-wrapper">
           <button
             disabled={selected === category.name}
             onClick={() => setSelected(category.name)}
