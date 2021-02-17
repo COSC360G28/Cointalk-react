@@ -16,22 +16,37 @@ $grey: #7e7e7e;
     display: flex;
     justify-content: space-between;
 
-    input {
-      color: $grey;
-      border: none;
-      margin: 5px;
-      font-size: 14px;
-      font-family: "Roboto";
-    }
+    .wrapper {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
 
-    select {
-      color: $grey;
-      border: none;
-      margin: 5px;
-
-      option {
-        font-family: "Roboto";
+      input {
+        color: $grey;
+        border: none;
+        margin: 0;
         font-size: 14px;
+        font-family: "Roboto";
+      }
+
+      select {
+        color: $grey;
+        border: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        width: 100px;
+
+        option {
+          font-family: "Roboto";
+          font-size: 14px;
+        }
+      }
+
+      svg {
+        width: 16px;
+        height: 16px;
+        margin: 10px;
       }
     }
   }
