@@ -1,12 +1,12 @@
 import "./App.css";
 import { NavBar } from "./components/navBar/NavBar";
-import { CategorySelector } from "./components/categorySelector/CategorySelector";
+import { MainPage } from "./pages/mainPage/MainPage";
 
 function App() {
   return (
     <div className="App">
       <NavBar />
-      <CategorySelector />
+      <MainPage />
     </div>
   );
 }
