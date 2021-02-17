@@ -22,7 +22,6 @@ $grey: #7e7e7e;
       align-items: center;
 
       input {
-        color: $grey;
         border: none;
         margin: 0;
         font-size: 14px;
@@ -36,6 +35,7 @@ $grey: #7e7e7e;
         -moz-appearance: none;
         appearance: none;
         width: 100px;
+        background-color: white;
 
         option {
           font-family: "Roboto";
