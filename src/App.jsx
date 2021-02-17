@@ -1,6 +1,5 @@
 import "./App.scss";
-import { NavBar } from "./components/navBar/NavBar";
-import { MainPage } from "./pages/mainPage/MainPage";
+import { Main } from "./pages/main/Main";
 import { Login } from "./pages/login/Login";
 import { Post } from "./pages/post/Post";
 import { User } from "./pages/user/User";
@@ -12,8 +11,7 @@ function App() {
       <div className="App">
         <Switch>
           <Route path="/" exact>
-            <NavBar />
-            <MainPage />
+            <Main />
           </Route>
           <Route path="/login" exact>
             <Login />
