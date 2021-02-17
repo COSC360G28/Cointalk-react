@@ -1,7 +1,67 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300&display=swap");
+
 $lavender: #aeadf0;
+$magenta: #ff206e;
 
 #category-selector {
   height: 50px;
-  width: 100%;
+  width: auto;
+  display: flex;
   background: $lavender;
+  flex-direction: row;
+  align-items: center;
+  overflow-x: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  padding: 0 5px;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  .category-wrapper {
+    .category {
+      width: 100px;
+      height: 30px;
+      border-radius: 15px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      background: white;
+      padding: 0;
+      border: none;
+      margin: 0 5px;
+
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      h2 {
+        font-family: "Roboto";
+        font-weight: 300;
+        font-size: 14px;
+        margin: 5px;
+      }
+
+      &:hover {
+        border: 1px solid $magenta;
+        color: $magenta;
+
+        svg {
+          fill: $magenta;
+        }
+      }
+
+      &.selected {
+        background: $magenta;
+        color: white;
+
+        svg {
+          fill: white;
+        }
+      }
+    }
+  }
 }
