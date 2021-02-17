@@ -1,6 +1,7 @@
-body {
-  margin: 0;
-  background-color: #f5f5f5;
+$light-grey: #f5f5f5;
+
+html {
+  background-color: $light-grey;
 }
 
 .App {
