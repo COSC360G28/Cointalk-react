@@ -1,4 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Monoton&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300&display=swap");
+
+$aqua: #41ead4;
 
 nav {
   height: 80px;
@@ -13,5 +16,62 @@ nav {
     font-size: 48px;
     font-family: "Monoton";
     font-weight: 200;
+  }
+
+  .login-desktop {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: auto;
+    font-family: "Roboto";
+
+    .sign-in {
+      text-decoration: none;
+      color: black;
+      margin: 10px;
+      font-size: 18px;
+    }
+
+    .sign-up {
+      width: 120px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 20px;
+      text-decoration: none;
+      color: white;
+      background-color: $aqua;
+      margin: 10px;
+
+      h3 {
+        margin: auto;
+        font-size: 18px;
+      }
+    }
+  }
+
+  .login-mobile {
+    display: none;
+  }
+}
+
+@media (max-width: 720px) {
+  nav {
+    .login-desktop {
+      display: none;
+    }
+
+    .login-mobile {
+      display: block;
+      margin: 20px;
+      margin-left: auto;
+
+      svg {
+        fill: $aqua;
+        width: 30px;
+        height: 30px;
+      }
+    }
   }
 }
