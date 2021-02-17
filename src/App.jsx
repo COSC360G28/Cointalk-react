@@ -1,8 +1,5 @@
 import "./App.scss";
-import { Main } from "./pages/main/Main";
-import { Login } from "./pages/login/Login";
-import { Post } from "./pages/post/Post";
-import { User } from "./pages/user/User";
+import { Main, Login, Post, User } from "./pages/";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 function App() {
