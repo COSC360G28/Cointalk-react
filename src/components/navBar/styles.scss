@@ -58,6 +58,12 @@ nav {
 
 @media (max-width: 720px) {
   nav {
+    height: 64px;
+
+    h1 {
+      font-size: 36px;
+    }
+
     .login-desktop {
       display: none;
     }
