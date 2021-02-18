@@ -1,5 +1,5 @@
 import "./App.scss";
-import { Main, Login, Post, User } from "./pages/";
+import { Main, Login, Post, User, SignUp } from "./pages/";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 function App() {
@@ -12,6 +12,9 @@ function App() {
           </Route>
           <Route path="/login" exact>
             <Login />
+          </Route>
+          <Route path="/signup" exact>
+            <SignUp />
           </Route>
           <Route path="/post" exact>
             <Post />
