@@ -3,11 +3,13 @@ import { NavBar } from "../../components/navBar/NavBar";
 import "./styles.scss";
 import { MainContent, Content } from "../../components/containers/Containers";
 import { PostPreview } from "../../components/postPreview/PostPreview";
+import { UserCard } from "../../components/userCard/UserCard";
 
 const testData = {
   user: {
     uid: 0,
     username: "User212",
+    image: "../../assets/example_profile.jpg",
     likes: 22,
     email: "email@gmail.com",
   },
@@ -40,7 +42,9 @@ export const User = () => {
     <>
       <NavBar />
       <MainContent>
-        <Content>{/* <UserCard {...testData.user} /> */}</Content>
+        <Content>
+          <UserCard {...testData.user} />
+        </Content>
         {testData.posts.map((post) => (
           <Content key={post.id}>
             <PostPreview {...post} />
