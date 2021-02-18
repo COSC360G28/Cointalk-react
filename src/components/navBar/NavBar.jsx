@@ -10,7 +10,7 @@ export const NavBar = () => {
         <a href="/login" className="sign-in">
           Sign In
         </a>
-        <a href="/login" className="sign-up">
+        <a href="/signup" className="sign-up">
           <h3>Sign Up</h3>
         </a>
       </div>
