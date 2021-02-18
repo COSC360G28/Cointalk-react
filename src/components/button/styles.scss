@@ -1,0 +1,27 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300&display=swap");
+
+$aqua: #41ead4;
+
+button {
+  width: 120px;
+  height: 40px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  text-decoration: none;
+  color: white;
+  background-color: $aqua;
+  margin: 10px;
+  font-family: "Roboto";
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  h3 {
+    margin: auto;
+    font-size: 18px;
+  }
+}
