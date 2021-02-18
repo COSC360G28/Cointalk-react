@@ -3,6 +3,7 @@ import { NavBar } from "../../components/navBar/NavBar";
 import "./styles.scss";
 import { MainContent, Content } from "../../components/containers/Containers";
 import { Comments } from "../../components/comments/Comments";
+import { NewComment } from "../../components/newComment/NewComment";
 
 export const Post = () => {
   return (
@@ -10,7 +11,9 @@ export const Post = () => {
       <NavBar />
       <MainContent>
         <Content>{/* <PostCard/> */}</Content>
-        <Content>{/* <NewComment/> */}</Content>
+        <Content>
+          <NewComment />
+        </Content>
         <Content>
           <Comments />
         </Content>
