@@ -1,13 +1,14 @@
 import React, { useState } from "react";
-import "./styles.scss";
 import { CategorySelector } from "../../components/categorySelector/CategorySelector";
 import { ScrollHeader } from "../../components/scrollHeader/ScrollHeader";
 import { NavBar } from "../../components/navBar/NavBar";
 import { PostPreview } from "../../components/postPreview/PostPreview";
+import { MainContent, Content } from "../../components/containers/Containers";
 
 const testData = {
   posts: [
     {
+      id: 0,
       title: "News: Paypal now accepting ETH",
       image: null,
       text:
@@ -17,6 +18,7 @@ const testData = {
       liked: false,
     },
     {
+      id: 1,
       title: "Newcomers Beware!",
       image: "../../assets/example_image.png",
       text:
@@ -36,11 +38,13 @@ export const Main = () => {
       <NavBar />
       <CategorySelector selected={category} setSelected={setCategory} />
       <ScrollHeader />
-      <div id="main-content">
+      <MainContent>
         {testData.posts.map((post) => (
-          <PostPreview {...post} />
+          <Content key={post.id}>
+            <PostPreview {...post} />
+          </Content>
         ))}
-      </div>
+      </MainContent>
     </>
   );
 };
