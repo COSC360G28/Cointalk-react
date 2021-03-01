@@ -1,0 +1,45 @@
+$grey: #7e7e7e;
+
+#new-comment-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  svg {
+    width: 20px;
+    height: 20px;
+    margin: 15px;
+    fill: $grey;
+  }
+
+  input {
+    border: none;
+    font-size: 14px;
+    flex: 1;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  button {
+    border: none;
+    background: none;
+
+    &:focus {
+      outline: none;
+    }
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    &.disabled {
+      opacity: 0;
+
+      &:hover {
+        cursor: auto;
+      }
+    }
+  }
+}
