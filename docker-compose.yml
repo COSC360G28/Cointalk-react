@@ -1,0 +1,15 @@
+services:
+  react:
+    build: react-app
+    ports:
+      - "3000:3000"
+  server:
+    build: server
+    ports:
+      - "5000:5000"
+  postgres:
+    image: "postgres:latest"
+    environment:
+      - "POSTGRES_PASSWORD=pg_pass"
+    ports:
+      - "5432:4000"
