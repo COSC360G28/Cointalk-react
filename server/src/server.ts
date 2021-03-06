@@ -48,4 +48,54 @@ app.get('/user/:id', (req, res) => {
     res.send('TODO');
 });
 
+// *** POST ENDPOINTS ***
+
+// Login
+app.post('/login', (req, res) => {
+    res.send('TODO');
+});
+
+// Sign Up
+app.post('/signup', (req, res) => {
+    res.send('TODO');
+});
+
+// Create Comment
+app.post('/comment', (req, res) => {
+    res.send('TODO');
+});
+
+// Create Post
+app.post('/post', (req, res) => {
+    res.send('TODO');
+});
+
+// Like Post
+app.post('/like', (req, res) => {
+    res.send('TODO');
+});
+
+// Request Password Reset
+app.post('/reset-password', (req, res) => {
+    res.send('todo');
+});
+
+// Ban User
+app.post('/user/:id/ban', (req, res) => {
+    // user = req.params.id
+    res.send('todo');
+});
+
+// Remove Post
+app.post('/post/:id/remove', (req, res) => {
+    // post = req.params.id
+    res.send('todo');
+});
+
+// Edit Post
+app.post('/post/:id/edit', (req, res) => {
+    // post = req.params.id
+    res.send('todo');
+});
+
 export { app };
