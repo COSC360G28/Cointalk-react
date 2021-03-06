@@ -17,18 +17,11 @@ $grey: #7e7e7e;
     font-size: 14px;
     flex: 1;
 
-    &:focus {
-      outline: none;
-    }
   }
 
   button {
     border: none;
     background: none;
-
-    &:focus {
-      outline: none;
-    }
 
     &:hover {
       cursor: pointer;
