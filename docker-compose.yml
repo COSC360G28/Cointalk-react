@@ -1,12 +1,18 @@
 services:
   react:
-    build: react-app
+    build: ./react-app
     ports:
       - "3000:3000"
+    volumes:
+      - ./react-app/src:/usr/src/app/src/
   server:
     build: server
     ports:
       - "5000:5000"
+    volumes:
+      - ./server/src:/usr/src/app/src/
+    depends_on:
+      - postgres
   postgres:
     image: "postgres:latest"
     environment:
