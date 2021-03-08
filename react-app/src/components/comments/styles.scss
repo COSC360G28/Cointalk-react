@@ -37,3 +37,21 @@ $grey: #7e7e7e;
     border-left: 1px solid rgba(0, 0, 0, 0.1);
   }
 }
+
+@media (max-width: 1280px) {
+  .comment {
+    .comment-user-info {
+      p {
+        font-size: 14px;
+      }
+
+      svg {
+        margin: 5px;
+      }
+    }
+
+    .comment-text {
+      font-size: 14px;
+    }
+  }
+}

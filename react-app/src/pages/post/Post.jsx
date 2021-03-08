@@ -5,8 +5,22 @@ import { MainContent, Content } from "../../components/containers/Containers";
 import { Comment } from "../../components/comments/Comment";
 import { NewComment } from "../../components/newComment/NewComment";
 import { PostCard } from "../../components/postCard/PostCard";
+import postImg from "../../assets/example_image.png";
+import profileImg from "../../assets/example_profile.jpg";
 
 export const Post = () => {
+  const postData = {
+    title: "Newcomers Beware!",
+    image: postImg,
+    text:
+      "Cryptos are not for everyone and you should be ready to lose money if you’re not careful!",
+    stars: 3,
+    user: {
+      username: "user212",
+      uid: 8,
+      profileImage: profileImg,
+    },
+  };
   const comments = [
     {
       user: {
@@ -51,7 +65,7 @@ export const Post = () => {
       <NavBar />
       <MainContent>
         <Content>
-          <PostCard />
+          <PostCard post={postData} />
         </Content>
         <Content>
           <NewComment />
