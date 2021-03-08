@@ -1,5 +1,6 @@
 import React from "react";
 import "./styles.scss";
+import { Stars } from "../stars/Stars";
 
 export const PostCard = ({ post }) => {
   return (
@@ -12,14 +13,14 @@ export const PostCard = ({ post }) => {
           src={post.user.profileImage}
         />
         <h3>{post.user.username}</h3>
-        <p className="stars">{post.stars}</p>
+        <Stars num={post.stars} />
       </div>
       {post.image ? (
         <div className="post-image-container">
           <img alt="Post" src={post.image} />
         </div>
       ) : null}
-      <p>{post.text}</p>
+      <p className="post-text-container">{post.text}</p>
     </div>
   );
 };

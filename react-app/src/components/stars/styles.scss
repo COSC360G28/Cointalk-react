@@ -1,0 +1,23 @@
+$pink: #ff206e;
+
+.star-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  .star {
+    margin: 5px;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .star-selected {
+    color: $pink;
+  }
+
+  .num-stars {
+    margin: 0;
+  }
+}

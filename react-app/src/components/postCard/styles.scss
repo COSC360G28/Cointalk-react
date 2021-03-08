@@ -27,8 +27,7 @@ $grey: #7e7e7e;
       font-size: 14px;
     }
 
-    .stars {
-      margin: 0;
+    .star-container {
       margin-left: auto;
     }
   }
@@ -47,7 +46,7 @@ $grey: #7e7e7e;
     }
   }
 
-  p {
+  .post-text-container {
     text-align: left;
     margin: 15px;
   }
@@ -82,7 +81,7 @@ $grey: #7e7e7e;
       }
     }
 
-    p {
+    .post-text-container {
       font-size: 14px;
       margin: 10px;
     }
