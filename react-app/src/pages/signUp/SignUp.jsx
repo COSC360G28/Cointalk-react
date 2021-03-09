@@ -14,26 +14,28 @@ export const SignUp = () => {
   }
 
   return (
-    <UserAccessForm>
-      <label htmlFor="profile-upload" className="custom-file-upload">
-        {profilePicture ? <img src={profilePicture} /> : <CameraIcon />}
-      </label>
-      <input
-        type="file"
-        id="profile-upload"
-        name="filename"
-        onChange={handleProfilePictureUpload}
-        accept="image/png, image/jpeg"
-      />
-      <input type="text" name="username" placeholder="Username" />
-      <input type="text" name="email" placeholder="Email" />
-      <input type="text" name="password" placeholder="Password" />
-      <input
-        type="text"
-        name="confirmPassword"
-        placeholder="Confirm Password"
-      />
-      <Button text="Sign In" />
-    </UserAccessForm>
+    <>
+      <UserAccessForm topLinkLabel="Sign In" topLinkHref="/login">
+        <label htmlFor="profile-upload" className="custom-file-upload">
+          {profilePicture ? <img src={profilePicture} /> : <CameraIcon />}
+        </label>
+        <input
+          type="file"
+          id="profile-upload"
+          name="filename"
+          onChange={handleProfilePictureUpload}
+          accept="image/png, image/jpeg"
+        />
+        <input type="text" name="username" placeholder="Username" />
+        <input type="text" name="email" placeholder="Email" />
+        <input type="password" name="password" placeholder="Password" />
+        <input
+          type="password"
+          name="confirmPassword"
+          placeholder="Confirm Password"
+        />
+        <Button text="Sign In" />
+      </UserAccessForm>
+    </>
   );
 };
