@@ -1,4 +1,4 @@
-import React from "react";
+import React, {Component} from "react";
 import "./styles.scss";
 import { Stars } from "../stars/Stars";
 

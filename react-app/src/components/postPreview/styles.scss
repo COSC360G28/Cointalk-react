@@ -1,0 +1,14 @@
+#text{
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    width:70em; // some width
+    text-align: left;
+}
+
+.headerPost{
+    text-align: left;
+
+    display: flex;
+    justify-content: space-between;
+}
