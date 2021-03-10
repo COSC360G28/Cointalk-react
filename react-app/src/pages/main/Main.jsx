@@ -4,7 +4,7 @@ import { ScrollHeader } from "../../components/scrollHeader/ScrollHeader";
 import { NavBar } from "../../components/navBar/NavBar";
 import { PostPreview } from "../../components/postPreview/PostPreview";
 import { MainContent, Content } from "../../components/containers/Containers";
-
+import { Button } from "../../components/button/Button";
 
 const testData = {
   posts: [
@@ -58,6 +58,9 @@ export const Main = () => {
           </Content>
         ))}
       </MainContent>
+          <Button text="Create Post" id="createPost"  action={() => {
+            window.location.href = "/CreatePost";}} />
+         
     </>
   );
 };
