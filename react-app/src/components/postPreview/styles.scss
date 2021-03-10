@@ -1,13 +1,121 @@
-#text{
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-    width:70em; // some width
-    text-align: left;
-}
+$grey: #7e7e7e;
 
-.headerPost{
+.post-preview {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+
+  .post-preview-image {
+    width: 90px;
+    height: 90px;
+    border-radius: 5px;
+    object-fit: cover;
+  }
+
+  .post-preview-text-container {
+    box-sizing: border-box;
     text-align: left;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    align-items: center;
+    height: 90px;
+    width: 100%;
+    padding: 0 10px;
+
+    .post-preview-header {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      width: 100%;
+
+      .post-preview-info-container {
+        display: flex;
+        flex-direction: row;
+
+        h3 {
+          margin: 0px;
+          font-size: 24px;
+        }
+
+        .user-container {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+
+          .user-icon {
+            fill: $grey;
+            margin: 7px;
+          }
+
+          p {
+            color: $grey;
+            font-size: 14px;
+            margin: 0;
+          }
+        }
+      }
+
+      .star-container {
+        margin-left: auto;
+      }
+    }
+
+    .post-preview-text {
+      color: $grey;
+      overflow: hidden;
+      text-align: left;
+      width: 100%;
+      height: auto;
+      margin: 5px 0;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+  }
+}
+
+@media (max-width: 1280px) {
+  .post-preview {
+    .post-preview-image {
+      width: 80px;
+      height: 80px;
+    }
+
+    .post-preview-text-container {
+      .post-preview-header {
+        .post-preview-info-container {
+          flex-direction: column;
+
+          h3 {
+            font-size: 18px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+
+          .user-container {
+            .user-icon {
+              width: 13px;
+              height: 13px;
+              margin: 5px;
+              margin-left: 0;
+            }
+
+            p {
+              font-size: 13px;
+            }
+          }
+        }
+
+        .star-container {
+          height: 26px;
+        }
+      }
+
+      .post-preview-text {
+        margin: 0;
+        font-size: 13px;
+      }
+    }
+  }
 }

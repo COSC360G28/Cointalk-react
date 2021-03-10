@@ -1,22 +1,27 @@
 import React from "react";
 import "./styles.scss";
 import { ReactComponent as UserIcon } from "../../assets/user.svg";
-import { Link } from 'react-router-dom';
+import { Stars } from "../stars/Stars";
 
-export const PostPreview = ({ title, image, text, username, likes, liked, category }) => {
+export const PostPreview = ({ title, image, text, username, likes, liked }) => {
   return (
-    <div >
-      <div className="headerPost">
-      <h3 id="title">{title}</h3>
-      <UserIcon id="userIcon" />
-      <image/>
-      <p>{username} {category}</p>
-      {likes}
+    <div className="post-preview">
+      {image ? (
+        <img className="post-preview-image" src={image} alt="Post" />
+      ) : null}
+      <div className="post-preview-text-container">
+        <div className="post-preview-header">
+          <div className="post-preview-info-container">
+            <h3 className="post-preview-title">{title}</h3>
+            <div className="user-container">
+              <UserIcon className="user-icon" />
+              <p>{username}</p>
+            </div>
+          </div>
+          <Stars num={likes} />
+        </div>
+        <p className="post-preview-text">{text}</p>
       </div>
-      <p id="text">{text}</p>
-      <Link to="/post">Read Full Post</Link>
-
     </div>
-
   );
 };
