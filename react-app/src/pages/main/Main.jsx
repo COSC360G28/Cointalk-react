@@ -4,6 +4,7 @@ import { ScrollHeader } from "../../components/scrollHeader/ScrollHeader";
 import { NavBar } from "../../components/navBar/NavBar";
 import { PostPreview } from "../../components/postPreview/PostPreview";
 import { MainContent, Content } from "../../components/containers/Containers";
+import { NewPost } from "../../components/newPost/NewPost";
 import exampleImage from "../../assets/example_image.png";
 
 const testData = {
@@ -53,6 +54,9 @@ export const Main = () => {
       <CategorySelector selected={category} setSelected={setCategory} />
       <ScrollHeader />
       <MainContent>
+        <Content>
+          <NewPost />
+        </Content>
         {testData.posts.map((post) => (
           <Content key={post.id}>
             <PostPreview {...post} />
