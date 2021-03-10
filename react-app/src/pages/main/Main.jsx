@@ -10,6 +10,7 @@ const testData = {
   posts: [
     {
       id: 0,
+      category: "ETH",
       title: "News: Paypal now accepting ETH",
       image: null,
       text:
@@ -20,6 +21,7 @@ const testData = {
     },
     {
       id: 1,
+      category: "ETH",
       title: "Newcomers Beware!",
       image: "../../assets/example_image.png",
       text:
@@ -30,6 +32,7 @@ const testData = {
     },
     {
       id: 2,
+      category: "ETH",
       title: <p>Dogecoin to the MOON!!! &#128640; &#128640; &#128640;</p>,
       image: "../../assets/doge.svg",
       text: "So i decided to believe this delusional hype train and invested like 200k into dogecoin. Guess what! I fucking lost 57k. This isn't funny man I used my 4 years of tuition to invest for this literal garbage dump of a coin. You delusional fucking apes made me lose 57k and are still saying 'HOLD HOLD' like a bunch of fucking subhuman monkeys with 1 fucking braincell. I want all my money back and I demand for reddit to pay it. Fucking hell u all are redacted for convincing me. Anyone who is considering investing in dogecoin DONT. THis dog coin is literally worth less than the shit i take in the morning.",
