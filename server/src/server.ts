@@ -1,5 +1,5 @@
 import express from 'express';
-import multer from 'multer';
+import { upload } from './multer';
 
 const app = express();
 
@@ -7,8 +7,6 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
-
-const upload = multer({ dest: 'uploads/' });
 
 // *** TEST ENDPOINTS ***
 
