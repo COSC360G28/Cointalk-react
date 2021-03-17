@@ -1,10 +1,12 @@
 import express from 'express';
+import { upload } from './multer';
 
 const app = express();
 
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static(__dirname + '/public'));
 
 // *** TEST ENDPOINTS ***
 
@@ -56,7 +58,8 @@ app.post('/login', (req, res) => {
 });
 
 // Sign Up
-app.post('/signup', (req, res) => {
+app.post('/signup', upload.single('profile-image'), (req, res, next) => {
+    console.log(req.file, req.body);
     res.send('TODO');
 });
 

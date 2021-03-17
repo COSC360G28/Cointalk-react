@@ -9,11 +9,11 @@ export const UserAccessForm = (props) => {
         <a href="/">
           <h1>COINTALK</h1>
         </a>
-        <form>
-          {props.children}
-        </form>
+        {props.children}
       </div>
-      <a href={props.topLinkHref} class="top-right-link">{props.topLinkLabel}</a>
+      <a href={props.topLinkHref} className="top-right-link">
+        {props.topLinkLabel}
+      </a>
     </div>
   );
 };
