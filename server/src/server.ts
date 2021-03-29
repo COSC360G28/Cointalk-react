@@ -1,4 +1,5 @@
 import express from 'express';
+import { Connection } from './database';
 import { upload } from './multer';
 
 const app = express();
@@ -24,6 +25,19 @@ app.post('/test', (req, res) => {
 
     // Return repsonse string to user
     res.send(response);
+});
+
+//Test to see if database connection is working
+app.get('/test-database', async (_, res) => {
+    var database = new Connection();
+    try {
+        await database.getConnection().query("");
+        res.send("Successfully connected to database!");
+    } catch (err) {
+        res.send("Unable to connect to database!");
+    } finally {
+        database.disconnect();
+    }
 });
 
 // *** GET ENDPOINTS ***
