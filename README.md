@@ -13,7 +13,7 @@
 ### Without Docker Compose
 
 1. Start the Database
-   - `docker run -e POSTGRES_PASSWORD=pg_pass -p 5432:4000 -d postgres`
+   - `docker run --name postgres-docker -e POSTGRES_PASSWORD=pg_pass -p 5432:5432 -d postgres`
 2. Start the node server
    - `cd server`
    - `npm run dev`
