@@ -66,7 +66,7 @@ CREATE TABLE commentLiked ( -- any entries in here mean that the comment was lik
 	accountID INT,
 	commentID INT,
 	FOREIGN KEY (accountID) REFERENCES account(accountID),
-	FOREIGN KEY (commendID) REFERENCES comment(commentID)
+	FOREIGN KEY (commentID) REFERENCES comment(commentID)
 );
 
 INSERT INTO coin(coinName, coinAbbreviation) VALUES ('Ehtherium', 'ETH');
