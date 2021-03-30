@@ -31,10 +31,10 @@ app.post('/test', (req, res) => {
 app.get('/test-database', async (_, res) => {
     var database = new Connection();
     try {
-        await database.getConnection().query("");
-        res.send("Successfully connected to database!");
+        await database.getConnection().query('');
+        res.send('Successfully connected to database!');
     } catch (err) {
-        res.send("Unable to connect to database!");
+        res.send('Unable to connect to database!');
     } finally {
         database.disconnect();
     }
@@ -44,7 +44,18 @@ app.get('/test-database', async (_, res) => {
 
 // Get Posts
 app.get('/posts', (req, res) => {
-    res.send('TODO');
+    // Return list of posts
+    // sort by
+    // const query: PostsQuery = req.body;
+    const db = new Connection();
+    const conn = db.getConnection();
+
+    // if (query.sort === 'NEW') {
+    conn.query('SELECT * FROM post').then((result) => {
+        res.send(result);
+    });
+    // } else {
+    // }
 });
 
 // Get Comments
