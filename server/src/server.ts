@@ -1,13 +1,14 @@
 import express from 'express';
 import { Connection } from './database';
 import { upload } from './multer';
+import cors from 'cors';
 
 const app = express();
 
-// Middleware
-app.use(express.json());
+// Middleware app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
+app.use(cors());
 
 // *** TEST ENDPOINTS ***
 
@@ -46,7 +47,8 @@ app.get('/test-database', async (_, res) => {
 app.get('/posts', (req, res) => {
     // Query Params
     const pageCount = 10;
-    const { page, sortBy } = req.body;
+    const page = (req.query.page || 0) as number;
+    const sortBy = (req.query.sortBy || 'NEW') as string;
 
     // Create Connection to DB
     const db = new Connection();
@@ -57,7 +59,11 @@ app.get('/posts', (req, res) => {
 
     if (sortBy.toUpperCase() === 'NEW') {
         // Return Posts by postdate
-        conn.query(`SELECT * FROM post ORDER BY postDate DESC LIMIT ${pageCount} OFFSET ${page * pageCount}`)
+        conn.query(
+            `SELECT * FROM post, account WHERE post.userid = account.uid ORDER BY date DESC LIMIT ${pageCount} OFFSET ${
+                page * pageCount
+            }`,
+        )
             .then((result) => {
                 db.disconnect();
                 res.status(200).send(result.rows);
@@ -69,7 +75,9 @@ app.get('/posts', (req, res) => {
     } else if (sortBy.toUpperCase() === 'HOT') {
         // Return Posts by score, then postdate
         conn.query(
-            `SELECT * FROM post ORDER BY postscore DESC, postDate DESC LIMIT ${pageCount} OFFSET ${page * pageCount}`,
+            `SELECT * FROM post, account WHERE post.userid = account.uid ORDER BY score DESC, date DESC LIMIT ${pageCount} OFFSET ${
+                page * pageCount
+            }`,
         )
             .then((result) => {
                 db.disconnect();
