@@ -100,8 +100,24 @@ app.get('/comments', (req, res) => {
 
 // Get Post
 app.get('/post/:id', (req, res) => {
-    // postID = req.params.id
-    res.send('TODO');
+    const postID = req.params.id;
+
+    // Return 400 if ID is not defined
+    if (!postID) res.status(400).send('Error: No post ID given');
+
+    // Create connection to DB
+    const db = new Connection();
+    const conn = db.getConnection();
+
+    conn.query(`SELECT * FROM post, account WHERE pid = ${postID} and post.userID = uid`)
+        .then((result) => {
+            // Return result with status 200
+            res.status(200).send(result.rows[0]);
+        })
+        .catch((err) => {
+            // Return 400 if post was not found
+            res.status(400).send(err);
+        });
 });
 
 // Get User

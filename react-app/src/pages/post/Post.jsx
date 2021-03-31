@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { NavBar } from "../../components/navBar/NavBar";
 import "./styles.scss";
 import { MainContent, Content } from "../../components/containers/Containers";
@@ -7,8 +8,24 @@ import { NewComment } from "../../components/newComment/NewComment";
 import { PostCard } from "../../components/postCard/PostCard";
 import postImg from "../../assets/example_image.png";
 import profileImg from "../../assets/example_profile.jpg";
+import axios from "axios";
 
 export const Post = () => {
+  let { id } = useParams();
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/post/${id}`)
+      .then((res) => {
+        setData(res.data);
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, [id]);
+
   const postData = {
     title: "Newcomers Beware!",
     image: postImg,
@@ -64,9 +81,7 @@ export const Post = () => {
     <>
       <NavBar />
       <MainContent>
-        <Content>
-          <PostCard post={postData} />
-        </Content>
+        <Content>{data ? <PostCard post={data} /> : null}</Content>
         <Content>
           <NewComment />
         </Content>
