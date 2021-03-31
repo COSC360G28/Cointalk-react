@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { CategorySelector } from "../../components/categorySelector/CategorySelector";
 import { ScrollHeader } from "../../components/scrollHeader/ScrollHeader";
 import { NavBar } from "../../components/navBar/NavBar";
@@ -46,6 +47,20 @@ const testData = {
 
 export const Main = () => {
   const [category, setCategory] = useState("ETH");
+  const [sort, setSort] = useState("NEW");
+  const [page, setPage] = useState(0);
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/posts?sortBy=${sort}&page=${page}`)
+      .then((res) => {
+        setPosts(res.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, [sort, page]);
 
   return (
     <>
@@ -53,8 +68,8 @@ export const Main = () => {
       <CategorySelector selected={category} setSelected={setCategory} />
       <ScrollHeader />
       <MainContent>
-        {testData.posts.map((post) => (
-          <Content key={post.id}>
+        {posts.map((post) => (
+          <Content key={post.pid}>
             <PostPreview {...post} />
           </Content>
         ))}

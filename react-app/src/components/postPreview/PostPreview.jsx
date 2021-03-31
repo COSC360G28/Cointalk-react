@@ -3,7 +3,7 @@ import "./styles.scss";
 import { ReactComponent as UserIcon } from "../../assets/user.svg";
 import { Stars } from "../stars/Stars";
 
-export const PostPreview = ({ title, image, text, username, likes, liked }) => {
+export const PostPreview = ({ title, image, text, username, score, liked }) => {
   return (
     <div className="post-preview">
       {image ? (
@@ -18,7 +18,7 @@ export const PostPreview = ({ title, image, text, username, likes, liked }) => {
               <p>{username}</p>
             </div>
           </div>
-          <Stars num={likes} />
+          <Stars num={score} />
         </div>
         <p className="post-preview-text">{text}</p>
       </div>
