@@ -44,18 +44,45 @@ app.get('/test-database', async (_, res) => {
 
 // Get Posts
 app.get('/posts', (req, res) => {
-    // Return list of posts
-    // sort by
-    // const query: PostsQuery = req.body;
+    // Query Params
+    const pageCount = 10;
+    const { page, sortBy } = req.body;
+
+    // Create Connection to DB
     const db = new Connection();
     const conn = db.getConnection();
 
-    // if (query.sort === 'NEW') {
-    conn.query('SELECT * FROM post').then((result) => {
-        res.send(result);
-    });
-    // } else {
-    // }
+    // Return error if page is invalid
+    if (page < 0) res.status(400).send('Error: Invalid page number.');
+
+    if (sortBy.toUpperCase() === 'NEW') {
+        // Return Posts by postdate
+        conn.query(`SELECT * FROM post ORDER BY postDate DESC LIMIT ${pageCount} OFFSET ${page * pageCount}`)
+            .then((result) => {
+                db.disconnect();
+                res.status(200).send(result.rows);
+            })
+            .catch((err) => {
+                db.disconnect();
+                res.status(500).send(err);
+            });
+    } else if (sortBy.toUpperCase() === 'HOT') {
+        // Return Posts by score, then postdate
+        conn.query(
+            `SELECT * FROM post ORDER BY postscore DESC, postDate DESC LIMIT ${pageCount} OFFSET ${page * pageCount}`,
+        )
+            .then((result) => {
+                db.disconnect();
+                res.status(200).send(result.rows);
+            })
+            .catch((err) => {
+                db.disconnect();
+                res.status(500).send(err);
+            });
+    } else {
+        // Return error if sortBy is invalid
+        res.status(400).send('Error: Invalid sort Method');
+    }
 });
 
 // Get Comments
