@@ -66,7 +66,7 @@ export const Main = () => {
     <>
       <NavBar />
       <CategorySelector selected={category} setSelected={setCategory} />
-      <ScrollHeader />
+      <ScrollHeader setSort={setSort} />
       <MainContent>
         {posts.map((post) => (
           <Content key={post.pid}>
