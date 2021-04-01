@@ -1,3 +1,4 @@
+import path from 'path';
 import express from 'express';
 import { Connection } from './database';
 import { upload } from './multer';
@@ -43,6 +44,12 @@ app.get('/test-database', async (_, res) => {
 });
 
 // *** GET ENDPOINTS ***
+
+// Get image
+app.get('/image/:id', (req, res) => {
+    const filename = req.params.id;
+    res.sendFile(path.resolve(`uploads/${filename}`));
+});
 
 // Get Posts
 app.get('/posts', (req, res) => {
