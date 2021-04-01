@@ -1,6 +1,7 @@
 import express from 'express';
 import { Connection } from './database';
 import { upload } from './multer';
+import { formatComments } from './functions';
 import cors from 'cors';
 
 const app = express();
@@ -94,14 +95,52 @@ app.get('/posts', (req, res) => {
 });
 
 // Get Comments
-app.get('/comments', (req, res) => {
-    res.send('TODO');
+app.get('/post/:id/comments', (req, res) => {
+    const postID = req.params.id;
+
+    // Return 400 if ID is not defined
+    if (!postID) res.status(400).send('Error: No post ID given');
+
+    // Create connection to DB
+    const db = new Connection();
+    const conn = db.getConnection();
+
+    conn.query(
+        `SELECT username, uid, content, parentID, cid FROM comment, account WHERE account.uid = comment.userID AND comment.mainPostID = ${postID}`,
+    )
+        .then((result) => {
+            db.disconnect();
+            let comments = formatComments(result.rows);
+            res.status(200).send(comments);
+        })
+        .catch((err) => {
+            db.disconnect();
+            res.status(400).send(err);
+        });
 });
 
 // Get Post
 app.get('/post/:id', (req, res) => {
-    // postID = req.params.id
-    res.send('TODO');
+    const postID = req.params.id;
+
+    // Return 400 if ID is not defined
+    if (!postID) res.status(400).send('Error: No post ID given');
+
+    // Create connection to DB
+    const db = new Connection();
+    const conn = db.getConnection();
+
+    conn.query(`SELECT * FROM post, account WHERE pid = ${postID} and post.userID = uid`)
+        .then((result) => {
+            db.disconnect();
+            // Return result with status 200
+            res.status(200).send(result.rows[0]);
+        })
+        .catch((err) => {
+            db.disconnect();
+            // Return 400 if post was not found
+            res.status(400).send(err);
+        });
 });
 
 // Get User

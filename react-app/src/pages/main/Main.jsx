@@ -5,7 +5,6 @@ import { ScrollHeader } from "../../components/scrollHeader/ScrollHeader";
 import { NavBar } from "../../components/navBar/NavBar";
 import { PostPreview } from "../../components/postPreview/PostPreview";
 import { MainContent, Content } from "../../components/containers/Containers";
-import exampleImage from "../../assets/example_image.png";
 
 export const Main = () => {
   const [category, setCategory] = useState("ETH");

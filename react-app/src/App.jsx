@@ -16,7 +16,7 @@ function App() {
           <Route path="/signup" exact>
             <SignUp />
           </Route>
-          <Route path="/post" exact>
+          <Route path="/post/:id" exact>
             <Post />
           </Route>
           <Route path="/user" exact>
