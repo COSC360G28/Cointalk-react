@@ -3,7 +3,7 @@ import "./styles.scss";
 import { ReactComponent as UserIcon } from "../../assets/user.svg";
 import { ReactComponent as ReplyIcon } from "../../assets/reply-fill.svg";
 
-export const Comment = ({ depth = 0, user, text, id, replies }) => {
+export const Comment = ({ depth = 0, username, content, cid, children }) => {
   return (
     <div className="comment">
       <div className="comment-user-info">
@@ -17,7 +17,7 @@ export const Comment = ({ depth = 0, user, text, id, replies }) => {
             // TODO: Navigate to user profile
           }}
         >
-          {user.username}
+          {username}
         </p>
         <ReplyIcon
           onClick={() => {
@@ -25,10 +25,10 @@ export const Comment = ({ depth = 0, user, text, id, replies }) => {
           }}
         />
       </div>
-      <p className="comment-text">{text}</p>
+      <p className="comment-text">{content}</p>
       <div className="replies">
-        {replies?.map((reply) => (
-          <Comment key={reply.id} depth={depth + 1} {...reply} />
+        {children?.map((child) => (
+          <Comment key={child.cid} depth={depth + 1} {...child} />
         ))}
       </div>
     </div>

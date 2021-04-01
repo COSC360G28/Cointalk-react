@@ -95,7 +95,7 @@ app.get('/posts', (req, res) => {
 });
 
 // Get Comments
-app.get('/posts/:id/comments', (req, res) => {
+app.get('/post/:id/comments', (req, res) => {
     const postID = req.params.id;
 
     // Return 400 if ID is not defined
