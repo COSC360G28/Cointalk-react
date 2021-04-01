@@ -45,9 +45,13 @@ export const Post = () => {
           <NewComment />
         </Content>
         <Content>
-          {comments?.map((comment) => (
-            <Comment key={comment.cid} {...comment} />
-          ))}
+          {comments && comments.length > 0 ? (
+            comments.map((comment) => (
+              <Comment key={comment.cid} {...comment} />
+            ))
+          ) : (
+            <p className="no-comments">No Comments</p>
+          )}
         </Content>
       </MainContent>
     </>
