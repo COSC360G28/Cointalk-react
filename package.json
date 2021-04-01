@@ -1,0 +1,21 @@
+{
+  "name": "cointalk-react",
+  "version": "1.0.0",
+  "description": "## Requirements",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "docker-compose stop && docker-compose down && docker-compose build --force-rm"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/COSC360G28/cointalk-react.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/COSC360G28/cointalk-react/issues"
+  },
+  "homepage": "https://github.com/COSC360G28/cointalk-react#readme"
+}
