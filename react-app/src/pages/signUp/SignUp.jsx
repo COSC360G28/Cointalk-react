@@ -17,6 +17,7 @@ export const SignUp = () => {
   const [password, setPassword] = useState("");
   const [secondPassword, setSecondPassword] = useState("");
   const form = useRef("");
+  const [accountCreated, setAccountCreated] = useState(false);
 
   //handle change
   function handleProfilePictureUpload(event) {
@@ -51,9 +52,11 @@ export const SignUp = () => {
     if(password == secondPassword) {
       axios
         .post(`http://localhost:5000/signup`, requestOptions)
-        .then((response) => {handleErrors(response)})
         .then((res) => {
-          alert("TODO: Add provider or someway of tracking user auth status.");
+          console.log(res.status);
+          if(res.status == 201) {
+            setAccountCreated(true);
+          }
         })
         .catch((err) => {
           handleErrors(err)
@@ -97,6 +100,7 @@ export const SignUp = () => {
             onChange={e => setSecondPassword(e.target.value)}
           />
           {(errorField == "secondPassword") && <p className="errorLabel">{errorMessage}</p>}
+          {accountCreated && <a href="./login"><h3 className="accountCreated">Account Created! Click Here To Login!</h3></a>}
           <Button text="Sign Up" />
         </form>
       </UserAccessForm>

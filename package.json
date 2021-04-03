@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/COSC360G28/cointalk-react/issues"
   },
-  "homepage": "https://github.com/COSC360G28/cointalk-react#readme"
+  "homepage": "https://github.com/COSC360G28/cointalk-react#readme",
+  "dependencies": {
+    "@types/client-sessions": "^0.8.0"
+  }
 }

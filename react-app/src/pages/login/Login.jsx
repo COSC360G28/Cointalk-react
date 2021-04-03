@@ -8,6 +8,7 @@ export const Login = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -20,12 +21,16 @@ export const Login = () => {
       }
     };
     axios
-      .post(`http://localhost:5000/login`, requestOptions)
+      .post(`http://localhost:5000/login`, requestOptions, {withCredentials: true})
       .then((res) => {
-        alert("TODO: Add provider or someway of tracking user auth status.");
+        window.location.replace("/");
       })
       .catch((err) => {
-        console.error(err);
+        if(err.response.status == 401) {
+          setError("Incorrect Email or Password.");
+        } else {
+          console.log(err);
+        }
       });
   }
 
@@ -34,6 +39,7 @@ export const Login = () => {
       <form onSubmit={handleSubmit}>
         <input type="text" name="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
         <input type="password" name="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
+        {error && <p className="errorLabel">{error}</p>}
         <Button text="Sign In" />
       </form>
     </UserAccessForm>

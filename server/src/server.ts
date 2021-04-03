@@ -5,13 +5,27 @@ import { upload } from './multer';
 import { formatComments } from './functions';
 import cors from 'cors';
 
+var session = require("express-session");
+declare module 'express-session' {
+    export interface SessionData {
+      uid: number;
+    }
+  }
+
 const app = express();
 
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
-app.use(cors());
+app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
+app.use(
+    session({
+        secret: "51egt56get546t651et61",
+        saveUninitialized: false,
+        resave: false,
+    })
+);
 
 // *** TEST ENDPOINTS ***
 
@@ -172,8 +186,9 @@ app.post('/login', (req, res) => {
         .then((result) => {
             if(result.rows.length > 0) {
                 //Example how to get query results
-                //let uid = result.rows[0].uid;
-                res.status(200).send("Credentials Accepted");
+                let uid = result.rows[0].uid;
+                req.session.uid = uid;
+                res.status(200).send("Logged In.");
             } else {
                 res.status(401).send("Bad Credentials.");
             }
@@ -222,11 +237,30 @@ app.post('/signup', (req, res, next) => {
                 res.status(201).send("Account Created.");
             })
             .catch((err) => {
-                res.status(409).send(err);
+                res.status(409).send({"field": "secondPassword", "message": "An account already exists with this email or username"});
             })
             .finally(() => {
                 db.disconnect();
             });
+    }
+});
+
+//Check tell front end if the user is logged in
+app.post('/check-auth-status', (req, res) => {
+    if(req.session && req.session.uid) {
+        res.status(200).send({"loggedIn" : "loggedIn"});
+    } else {
+        res.status(200).send({"loggedIn" : "loggedOut"});
+    }
+});
+
+//Log out
+app.post('/logout', (req, res) => {
+    if(req.session) {
+        req.session.destroy(function(err) {
+            console.error(err);
+        });
+        res.status(200).send({"loggedIn" : "loggedIn"});
     }
 });
 
