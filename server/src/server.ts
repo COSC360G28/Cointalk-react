@@ -5,12 +5,27 @@ import { upload } from './multer';
 import { formatComments } from './functions';
 import cors from 'cors';
 
+var session = require('express-session');
+declare module 'express-session' {
+    export interface SessionData {
+        uid: number;
+    }
+}
+
 const app = express();
 
-// Middleware app.use(express.json());
+// Middleware
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
-app.use(cors());
+app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
+app.use(
+    session({
+        secret: '51egt56get546t651et61',
+        saveUninitialized: false,
+        resave: false,
+    }),
+);
 
 // *** TEST ENDPOINTS ***
 
@@ -160,12 +175,100 @@ app.get('/user/:id', (req, res) => {
 
 // Login
 app.post('/login', (req, res) => {
-    res.send('TODO');
+    var email = req.body.body.email;
+    var password = req.body.body.password;
+
+    const db = new Connection();
+    const conn = db.getConnection();
+    conn.query(
+        `SELECT username, uid FROM account WHERE account.email = '${email}' AND account.password = '${password}' ORDER BY uid DESC LIMIT 1`,
+    )
+        .then((result) => {
+            if (result.rows.length > 0) {
+                //Example how to get query results
+                let uid = result.rows[0].username;
+                req.session.uid = uid;
+                res.status(200).send('Logged In.');
+            } else {
+                res.status(401).send('Bad Credentials.');
+            }
+        })
+        .catch((err) => {
+            res.status(400).send(err);
+        })
+        .finally(() => {
+            db.disconnect();
+        });
 });
 
 // Sign Up
-app.post('/signup', upload.single('profile-image'), (req, res, next) => {
-    console.log(req.file, req.body);
+app.post('/signup', (req, res, next) => {
+    const username = req.body.body.username;
+    const email = req.body.body.email;
+    const password = req.body.body.password;
+
+    if (!username) {
+        res.status(400).send({ field: 'username', message: 'is required.' });
+    } else if (!email) {
+        res.status(400).send({ field: 'email', message: 'is required.' });
+    } else if (!password) {
+        res.status(400).send({ field: 'password', message: 'is required.' });
+    } else if (username.length < 5) {
+        res.status(400).send({ field: 'username', message: 'is too short. Must be at least 5 characters long.' });
+    } else if (username.length > 20) {
+        res.status(400).send({ field: 'username', message: 'is too long. Must be less than 20 characters.' });
+    } else if (email.length < 5) {
+        res.status(400).send({ field: 'email', message: 'is too short. Must be at least 5 characters long.' });
+    } else if (email.length > 50) {
+        res.status(400).send({ field: 'email', message: 'is too long. Must be less than 50 characters.' });
+    } else if (password.length < 6) {
+        res.status(400).send({ field: 'password', message: 'is too short. Must be at least 6 characters long.' });
+    } else if (password.length > 30) {
+        res.status(400).send({ field: 'password', message: 'is too long. Must be less than 30 characters.' });
+    } else {
+        const date = Math.round(Date.now() / 1000);
+        const db = new Connection();
+        const conn = db.getConnection();
+        conn.query(
+            `INSERT INTO account(username, password, email, dateCreated, admin) VALUES ('${username}', '${password}', '${email}', to_timestamp(${date}), FALSE)`,
+        )
+            .then((result) => {
+                req.session.uid = username;
+                res.status(201).send('Account created successfully');
+            })
+            .catch((err) => {
+                res.status(409).send({
+                    field: 'secondPassword',
+                    message: 'An account already exists with this email or username',
+                });
+            })
+            .finally(() => {
+                db.disconnect();
+            });
+    }
+});
+
+//Check tell front end if the user is logged in
+app.post('/check-auth-status', (req, res) => {
+    if (req.session && req.session.uid) {
+        res.status(200).send({ loggedIn: 'loggedIn' });
+    } else {
+        res.status(200).send({ loggedIn: 'loggedOut' });
+    }
+});
+
+//Log out
+app.post('/logout', (req, res) => {
+    if (req.session) {
+        req.session.destroy(function (err) {
+            console.error(err);
+        });
+        res.status(200).send({ loggedIn: 'loggedIn' });
+    }
+});
+
+//used to upload a profile picture for an account
+app.post('/uploadProfileImage', upload.single('profile-image'), (req, res, next) => {
     res.send('TODO');
 });
 

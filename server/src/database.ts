@@ -34,7 +34,6 @@ export class Connection {
     populate() {
         fs.readFile('Database.ddl', 'utf-8', (err, data) => {
             if (err) throw err;
-            // console.log(data);
             this.client.query(data, (err) => {
                 if (err) throw err;
             });
