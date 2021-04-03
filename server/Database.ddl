@@ -10,9 +10,9 @@ CREATE TYPE post_type AS ENUM ('text', 'pic');
 
 CREATE TABLE account (
 	uid SERIAL NOT NULL,
-	username VARCHAR(20),
+	username VARCHAR(20) UNIQUE,
 	password VARCHAR(30),
-	email VARCHAR(50),
+	email VARCHAR(50) UNIQUE,
 	accountScore INT,
 	accountAvatarURL VARCHAR(100),
 	dateCreated TIMESTAMP,
