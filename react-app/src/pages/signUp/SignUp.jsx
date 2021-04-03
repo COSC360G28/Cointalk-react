@@ -6,7 +6,6 @@ import { ReactComponent as CameraIcon } from "../../assets/camera-fill.svg";
 import axios, { AxiosError } from "axios";
 
 export const SignUp = () => {
-
   //Sign up fields
   const [profilePictureURL, setProfilePictureURL] = useState(null);
   const [profilePicture, setProfilePicture] = useState(null);
@@ -17,7 +16,6 @@ export const SignUp = () => {
   const [password, setPassword] = useState("");
   const [secondPassword, setSecondPassword] = useState("");
   const form = useRef("");
-  const [accountCreated, setAccountCreated] = useState(false);
 
   //handle change
   function handleProfilePictureUpload(event) {
@@ -36,30 +34,29 @@ export const SignUp = () => {
       console.error(response);
     }
     return response;
-}
+  }
 
   function handleSubmit(event) {
     event.preventDefault();
     const requestOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: { 
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: {
         email: email,
         password: password,
-        username: username
-      }
+        username: username,
+      },
     };
-    if(password == secondPassword) {
+    if (password == secondPassword) {
       axios
         .post(`http://localhost:5000/signup`, requestOptions)
         .then((res) => {
-          console.log(res.status);
-          if(res.status == 201) {
-            setAccountCreated(true);
+          if (res.status == 201) {
+            window.location.href = "http://localhost:3000/";
           }
         })
         .catch((err) => {
-          handleErrors(err)
+          handleErrors(err);
         });
     } else {
       setErrorField("secondPassword");
@@ -70,12 +67,18 @@ export const SignUp = () => {
   return (
     <>
       <UserAccessForm topLinkLabel="Sign In" topLinkHref="/login">
-        <form 
+        <form
+          /* action="http:localhost:5000/signup" */
+          /* method="POST" */
           onSubmit={handleSubmit}
           ref={form}
         >
           <label htmlFor="profile-upload" className="custom-file-upload">
-            {profilePictureURL ? <img src={profilePictureURL} /> : <CameraIcon />}
+            {profilePictureURL ? (
+              <img src={profilePictureURL} />
+            ) : (
+              <CameraIcon />
+            )}
           </label>
           <input
             type="file"
@@ -84,23 +87,48 @@ export const SignUp = () => {
             onChange={handleProfilePictureUpload}
             accept="image/png, image/jpeg"
           />
-          <input type="text" name="username" placeholder="Username" value={username} onChange={e => setUsername(e.target.value)} />
-          {(errorField == "username") && <p className="errorLabel">Username {errorMessage}</p>}
+          <input
+            type="text"
+            name="username"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          {errorField == "username" && (
+            <p className="errorLabel">Username {errorMessage}</p>
+          )}
 
-          <input type="text" name="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
-          {(errorField == "email") && <p className="errorLabel">Email {errorMessage}</p>}
+          <input
+            type="text"
+            name="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          {errorField == "email" && (
+            <p className="errorLabel">Email {errorMessage}</p>
+          )}
 
-          <input type="password" name="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
-          {(errorField == "password") && <p className="errorLabel">Password {errorMessage}</p>}
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          {errorField == "password" && (
+            <p className="errorLabel">Password {errorMessage}</p>
+          )}
           <input
             type="password"
             name="confirmPassword"
             placeholder="Confirm Password"
             value={secondPassword}
-            onChange={e => setSecondPassword(e.target.value)}
+            onChange={(e) => setSecondPassword(e.target.value)}
           />
-          {(errorField == "secondPassword") && <p className="errorLabel">{errorMessage}</p>}
-          {accountCreated && <a href="./login"><h3 className="accountCreated">Account Created! Click Here To Login!</h3></a>}
+          {errorField == "secondPassword" && (
+            <p className="errorLabel">{errorMessage}</p>
+          )}
           <Button text="Sign Up" />
         </form>
       </UserAccessForm>
