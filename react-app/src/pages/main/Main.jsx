@@ -14,7 +14,7 @@ export const Main = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/posts?sortBy=${sort}&page=${page}`)
+      .get(`${process.env.REACT_APP_API_URL}/posts?sortBy=${sort}&page=${page}`)
       .then((res) => {
         setPosts(res.data);
       })

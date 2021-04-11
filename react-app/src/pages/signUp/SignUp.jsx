@@ -48,11 +48,13 @@ export const SignUp = () => {
       },
     };
     if (password == secondPassword) {
+      console.log(process.env.REACT_APP_API_URL);
       axios
-        .post(`http://localhost:5000/signup`, requestOptions)
+        .post(`${process.env.REACT_APP_API_URL}/signup`, requestOptions)
         .then((res) => {
+          console.log("error");
           if (res.status == 201) {
-            window.location.href = "http://localhost:3000/";
+            window.location.href = process.env.REACT_APP_BASE_URL;
           }
         })
         .catch((err) => {
@@ -67,12 +69,7 @@ export const SignUp = () => {
   return (
     <>
       <UserAccessForm topLinkLabel="Sign In" topLinkHref="/login">
-        <form
-          /* action="http:localhost:5000/signup" */
-          /* method="POST" */
-          onSubmit={handleSubmit}
-          ref={form}
-        >
+        <form onSubmit={handleSubmit} ref={form}>
           <label htmlFor="profile-upload" className="custom-file-upload">
             {profilePictureURL ? (
               <img src={profilePictureURL} />

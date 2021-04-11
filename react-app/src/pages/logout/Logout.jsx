@@ -6,21 +6,24 @@ import axios from "axios";
 //Use reverse for components that can only be viewed when NOT logged in
 //See navbar component for example
 export const Logout = () => {
+  useEffect(() => {
+    logout();
+  });
 
-    useEffect(() => {
-        logout();
-    });
+  function logout() {
+    axios
+      .post(
+        `${process.env.REACT_APP_API_URL}/logout`,
+        { empty: "empty" },
+        { withCredentials: true }
+      )
+      .then((res) => {
+        window.location.replace("/");
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
 
-    function logout() {
-        axios
-        .post(`http://localhost:5000/logout`, {"empty" : "empty"}, {withCredentials: true})
-        .then((res) => {
-            window.location.replace("/");
-        })
-        .catch((err) => {
-            console.error(err);
-        });
-    }
-
-    return(<>   </>);
+  return <> </>;
 };
