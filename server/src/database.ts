@@ -1,16 +1,19 @@
 import { Client } from 'pg';
 import fs from 'fs';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 export class Connection {
     private client: Client;
 
     constructor() {
         this.client = new Client({
-            user: 'postgres',
-            database: 'postgres',
-            host: 'postgres',
-            password: 'pg_pass',
-            port: 5432,
+            user: process.env.DB_USER,
+            database: process.env.DB_NAME,
+            host: process.env.DB_HOST,
+            password: process.env.DB_PASS,
+            port: parseInt(<string>process.env.DB_PORT, 10),
             query_timeout: 10000,
         });
         this.connect();

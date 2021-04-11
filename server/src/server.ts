@@ -4,6 +4,9 @@ import { Connection } from './database';
 import { upload } from './multer';
 import { formatComments } from './functions';
 import cors from 'cors';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 var session = require('express-session');
 declare module 'express-session' {
@@ -18,7 +21,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
-app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
+app.use(cors({ credentials: true, origin: process.env.APP_BASE_URL }));
 app.use(
     session({
         secret: '51egt56get546t651et61',

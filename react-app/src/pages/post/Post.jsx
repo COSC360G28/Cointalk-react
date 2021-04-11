@@ -16,7 +16,7 @@ export const Post = () => {
   useEffect(() => {
     // Get post data
     axios
-      .get(`http://localhost:5000/post/${id}`)
+      .get(`${process.env.REACT_APP_API_URL}/post/${id}`)
       .then((res) => {
         setData(res.data);
         console.log(res.data);
@@ -27,7 +27,7 @@ export const Post = () => {
 
     // Get comments list
     axios
-      .get(`http://localhost:5000/post/${id}/comments`)
+      .get(`${process.env.REACT_APP_API_URL}/post/${id}/comments`)
       .then((res) => {
         setComments(res.data);
       })
