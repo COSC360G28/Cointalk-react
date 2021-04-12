@@ -13,18 +13,7 @@ export const Post = () => {
   const [data, setData] = useState(null);
   const [comments, setComments] = useState();
 
-  useEffect(() => {
-    // Get post data
-    axios
-      .get(`${process.env.REACT_APP_API_URL}/post/${id}`)
-      .then((res) => {
-        setData(res.data);
-        console.log(res.data);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-
+  const getComments = () => {
     // Get comments list
     axios
       .get(`${process.env.REACT_APP_API_URL}/post/${id}/comments`)
@@ -32,8 +21,21 @@ export const Post = () => {
         setComments(res.data);
       })
       .catch((err) => {
-        console.error(err);
+        window.alert(err.response.data.error);
       });
+  };
+
+  useEffect(() => {
+    // Get post data
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/post/${id}`)
+      .then((res) => {
+        setData(res.data);
+      })
+      .catch((err) => {
+        window.alert(err.response.data.error);
+      });
+    getComments();
   }, [id]);
 
   return (
@@ -42,7 +44,7 @@ export const Post = () => {
       <MainContent>
         <Content>{data ? <PostCard post={data} /> : null}</Content>
         <Content>
-          <NewComment />
+          <NewComment postID={id} onSend={getComments} />
         </Content>
         <Content>
           {comments && comments.length > 0 ? (
