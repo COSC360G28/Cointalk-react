@@ -233,10 +233,10 @@ app.post('/signup', (req, res, next) => {
         const db = new Connection();
         const conn = db.getConnection();
         conn.query(
-            `INSERT INTO account(username, password, email, dateCreated, admin) VALUES ('${username}', '${password}', '${email}', to_timestamp(${date}), FALSE)`,
+            `INSERT INTO account(username, password, email, dateCreated, admin) VALUES ('${username}', '${password}', '${email}', to_timestamp(${date}), FALSE) RETURNING uid`,
         )
             .then((result) => {
-                req.session.uid = username;
+                req.session.uid = result.rows[0].uid;
                 res.status(201).send('Account created successfully');
             })
             .catch((err) => {
