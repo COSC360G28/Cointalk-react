@@ -544,6 +544,28 @@ app.post('/check-post-like', (req, res) => {
     }
 });
 
+// Returns how many likes a post has
+app.post('/post-like-count', (req, res) => {
+
+    const db = new Connection();
+    const conn = db.getConnection();
+    conn.query(
+        `SELECT * FROM postLiked WHERE postID=${req.body.pid}`,
+    )
+        .then((result) => {
+            res.status(200).send({ numberOfLikes: result.rows.length });
+        })
+        .catch((err) => {
+            res.status(400).send({
+                message: 'Unable to query database.',
+            });
+        })
+        .finally(() => {
+            db.disconnect();
+        });
+
+});
+
 // Request Password Reset
 app.post('/reset-password', (req, res) => {
     res.send('todo');
