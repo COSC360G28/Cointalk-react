@@ -16,6 +16,7 @@ export const Main = () => {
     axios
       .get(`${process.env.REACT_APP_API_URL}/posts?sortBy=${sort}&page=${page}`)
       .then((res) => {
+        console.log(res.data);
         setPosts(res.data);
       })
       .catch((err) => {

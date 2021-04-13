@@ -22,7 +22,10 @@ export const PostCard = ({ post }) => {
       </div>
       {post.image ? (
         <div className="post-image-container">
-          <img alt="Post" src={post.imageurl} />
+          <img
+            alt="Post"
+            src={process.env.REACT_APP_API_URL + "/image/" + post.image}
+          />
         </div>
       ) : null}
       <p className="post-text-container">{post.text}</p>
