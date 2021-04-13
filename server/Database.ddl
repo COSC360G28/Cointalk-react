@@ -97,11 +97,13 @@ INSERT INTO post(title, text, userID, date, type, score, coin) VALUES('Filling u
 INSERT INTO post(title, text, userID, date, type, score, coin) VALUES('Filling up space to test multiple pages!', 'Content is the most important part of the post!', 1, '2021-04-02 01:12:12', 'text', 0, 'ETH');
 INSERT INTO post(title, text, userID, date, type, score, coin) VALUES('Making sure stuff still works on the second page!', 'Gave this post a bunch of likes to make sure it works!', 1, '2021-04-02 01:12:12', 'text', 3, 'ETH');
 
+
 INSERT INTO comment(content, userID, score, date, mainPostID) VALUES ('Yeah but you can also make a lot of money :D', 3, 2, '2021-03-22 01:06:09', 3);
 INSERT INTO comment(content, userID, score, date, mainPostID, parentID) VALUES ('YUP', 2, 3, '2021-03-22 04:06:32', 3, 1);
 INSERT INTO comment(content, userID, score, date, mainPostID, parentID) VALUES ('Absolutely!', 1, 1, '2021-03-22 07:44:22', 3, 1);
 INSERT INTO comment(content, userID, score, date, mainPostID, parentID) VALUES ('Glad you agree!', 3, 2, '2021-03-23 13:11:54', 3, 2);
 INSERT INTO comment(content, userID, score, date, mainPostID) VALUES ('yeah it''s too spooky for me', 4, 0, '2021-03-24 18:33:21', 3);
+
 INSERT INTO comment(content, userID, score, date, mainPostID) VALUES ('and testing that the comment system still works', 1, 0, '2021-04-12 18:33:21', 17);
 
 INSERT INTO postLiked(accountID, postID) VALUES (2, 1);
