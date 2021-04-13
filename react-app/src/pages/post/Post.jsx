@@ -51,7 +51,7 @@ export const Post = () => {
         window.alert(err.response.data.error);
       });
     getComments();
-  }, [id, getComments]);
+  }, []);
 
   return (
     <>

@@ -33,7 +33,6 @@ export const Stars = ({ score, postId }) => {
             .catch((err) => {
                 console.error(err);
             });
-
     };
 
     //Query to see if the user has liked the post already
