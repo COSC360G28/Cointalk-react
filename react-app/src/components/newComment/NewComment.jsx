@@ -39,6 +39,11 @@ export const NewComment = ({
         <input
           id="comment-input"
           placeholder="New comment..."
+          onKeyDown={(e) => {
+            if (e.nativeEvent.key === "Enter") {
+              submit();
+            }
+          }}
           onChange={(e) => {
             setText(e.target.value);
           }}
