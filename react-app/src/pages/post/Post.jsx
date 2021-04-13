@@ -12,6 +12,15 @@ export const Post = () => {
   let { id } = useParams();
   const [data, setData] = useState(null);
   const [comments, setComments] = useState();
+  const [replyID, setReplyID] = useState();
+  const [replyUser, setReplyUser] = useState();
+
+  const onReply = (cid, username) => {
+    setReplyUser(username);
+    setReplyID(cid);
+    const commentInput = document.getElementById("comment-input");
+    commentInput.focus();
+  };
 
   const getComments = () => {
     // Get comments list
@@ -23,6 +32,12 @@ export const Post = () => {
       .catch((err) => {
         window.alert(err.response.data.error);
       });
+  };
+
+  const onCommentSent = () => {
+    getComments();
+    setReplyUser(null);
+    setReplyID(null);
   };
 
   useEffect(() => {
@@ -44,12 +59,17 @@ export const Post = () => {
       <MainContent>
         <Content>{data ? <PostCard post={data} /> : null}</Content>
         <Content>
-          <NewComment postID={id} onSend={getComments} />
+          <NewComment
+            postID={id}
+            onSend={onCommentSent}
+            parentID={replyID}
+            parentUser={replyUser}
+          />
         </Content>
         <Content>
           {comments && comments.length > 0 ? (
             comments.map((comment) => (
-              <Comment key={comment.cid} {...comment} />
+              <Comment key={comment.cid} onReply={onReply} {...comment} />
             ))
           ) : (
             <p className="no-comments">No Comments</p>

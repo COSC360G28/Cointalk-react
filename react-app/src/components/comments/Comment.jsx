@@ -3,7 +3,14 @@ import "./styles.scss";
 import { ReactComponent as UserIcon } from "../../assets/user.svg";
 import { ReactComponent as ReplyIcon } from "../../assets/reply-fill.svg";
 
-export const Comment = ({ depth = 0, username, content, cid, children }) => {
+export const Comment = ({
+  depth = 0,
+  username,
+  content,
+  cid,
+  children,
+  onReply,
+}) => {
   return (
     <div className="comment">
       <div className="comment-user-info">
@@ -21,14 +28,19 @@ export const Comment = ({ depth = 0, username, content, cid, children }) => {
         </p>
         <ReplyIcon
           onClick={() => {
-            // TODO: Open reply input
+            onReply(cid, username);
           }}
         />
       </div>
       <p className="comment-text">{content}</p>
       <div className="replies">
         {children?.map((child) => (
-          <Comment key={child.cid} depth={depth + 1} {...child} />
+          <Comment
+            key={child.cid}
+            onReply={onReply}
+            depth={depth + 1}
+            {...child}
+          />
         ))}
       </div>
     </div>

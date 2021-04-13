@@ -1,10 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./styles.scss";
 import { ReactComponent as NewCommentIcon } from "../../assets/pencil-square.svg";
 import { ReactComponent as SendIcon } from "../../assets/arrow-right-circle.svg";
 import axios from "axios";
 
-export const NewComment = ({ postID, onSend, parentID = null }) => {
+export const NewComment = ({
+  postID,
+  onSend,
+  parentID = null,
+  parentUser = null,
+}) => {
   const [text, setText] = useState("");
 
   const submit = () => {
@@ -30,13 +35,19 @@ export const NewComment = ({ postID, onSend, parentID = null }) => {
   return (
     <div id="new-comment-container">
       <NewCommentIcon />
-      <input
-        placeholder="New comment..."
-        onChange={(e) => {
-          setText(e.target.value);
-        }}
-        value={text}
-      />
+      <div className="input-container">
+        <input
+          id="comment-input"
+          placeholder="New comment..."
+          onChange={(e) => {
+            setText(e.target.value);
+          }}
+          value={text}
+        />
+        {parentID ? (
+          <p className="reply-tag">Replying to {parentUser}</p>
+        ) : null}
+      </div>
       <button onClick={submit} className={text ? null : "disabled"}>
         <SendIcon className="send" />
       </button>
