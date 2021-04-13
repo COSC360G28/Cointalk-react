@@ -21,12 +21,18 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
+app.set('trust proxy', 1);
 app.use(cors({ credentials: true, origin: process.env.APP_BASE_URL }));
 app.use(
     session({
         secret: '51egt56get546t651et61',
-        saveUninitialized: false,
-        resave: false,
+        saveUninitialized: true,
+        resave: true,
+        httpOnly: false,
+        cookie: {
+            secure: false,
+            maxAge: 8 * 60 * 60 * 1000, // 8 hours
+        },
     }),
 );
 
@@ -189,9 +195,10 @@ app.post('/login', (req, res) => {
         .then((result) => {
             if (result.rows.length > 0) {
                 //Example how to get query results
-                let uid = result.rows[0].username;
-                req.session.uid = uid;
-                res.status(200).send('Logged In.');
+                req.session.uid = result.rows[0].uid;
+                req.session.save(() => {
+                    res.status(200).send('Logged In.');
+                });
             } else {
                 res.status(401).send('Bad Credentials.');
             }
@@ -263,10 +270,13 @@ app.post('/check-auth-status', (req, res) => {
 //Log out
 app.post('/logout', (req, res) => {
     if (req.session) {
-        req.session.destroy(function (err) {
-            console.error(err);
+        req.session.destroy((err) => {
+            if (err) {
+                res.status(400).send({ loggedIn: 'loggedIn' });
+            } else {
+                res.status(200).send({ loggedIn: 'loggedIn' });
+            }
         });
-        res.status(200).send({ loggedIn: 'loggedIn' });
     }
 });
 
@@ -277,7 +287,30 @@ app.post('/uploadProfileImage', upload.single('profile-image'), (req, res, next)
 
 // Create Comment
 app.post('/comment', (req, res) => {
-    res.send('TODO');
+    if (!req.session?.uid) {
+        res.status(401).send({ error: 'Error: Must  be logged in for this operation.' });
+    } else if (!req.body?.postID) {
+        res.status(400).send({ error: 'Error: No postID given' });
+    } else if (!req.body?.content) {
+        res.status(400).send({ error: 'Error: No content given' });
+    } else {
+        const db = new Connection();
+        const conn = db.getConnection();
+        const date = new Date().toISOString();
+        const parentID = req.body.parentID || null;
+        const { postID, content } = req.body;
+        const query = parentID
+            ? `INSERT INTO comment(content, userID, score, date, mainPostID, parentID) VALUES ('${content}', ${req.session.uid}, 0, '${date}', ${postID}, ${parentID})`
+            : `INSERT INTO comment(content, userID, score, date, mainPostID) VALUES ('${content}', ${req.session.uid}, 0, '${date}', ${postID})`;
+
+        conn.query(query)
+            .then(() => {
+                res.status(200).send('Comment posted successfully');
+            })
+            .catch(() => {
+                res.status(400).send("Error: Couldn't add comment to the database.");
+            });
+    }
 });
 
 // Create Post

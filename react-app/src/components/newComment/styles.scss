@@ -4,6 +4,7 @@ $grey: #7e7e7e;
   display: flex;
   flex-direction: row;
   align-items: center;
+  position: relative;
 
   svg {
     width: 20px;
@@ -12,11 +13,25 @@ $grey: #7e7e7e;
     fill: $grey;
   }
 
-  input {
-    border: none;
-    font-size: 14px;
+  .input-container {
     flex: 1;
+    display: flex;
+    flex-direction: column;
 
+    .reply-tag {
+      margin: 0;
+      color: $grey;
+      font-style: italic;
+      font-size: 10px;
+      text-align: left;
+      padding: 2px 1px;
+    }
+
+    input {
+      border: none;
+      font-size: 14px;
+      flex: 1;
+    }
   }
 
   button {
