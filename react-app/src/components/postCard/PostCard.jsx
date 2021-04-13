@@ -18,7 +18,7 @@ export const PostCard = ({ post }) => {
           <UserIcon className="profile-image" />
         )}
         <h3>{post.username}</h3>
-        <Stars num={post.score} />
+        <Stars score={post.score} postId={post.pid} />
       </div>
       {post.image ? (
         <div className="post-image-container">

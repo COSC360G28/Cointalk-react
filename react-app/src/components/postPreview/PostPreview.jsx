@@ -37,7 +37,7 @@ export const PostPreview = ({
               <p>{username}</p>
             </div>
           </div>
-          <Stars num={score} />
+          <Stars score={score} postId={pid} />
         </div>
         <p className="post-preview-text">{text}</p>
       </div>

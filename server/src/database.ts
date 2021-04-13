@@ -26,8 +26,15 @@ export class Connection {
             }
         });
     }
+
     disconnect() {
         this.client.end();
+    }
+
+    resetConnection() {
+        this.disconnect();
+        this.connect();
+        return this.client;
     }
 
     getConnection() {
