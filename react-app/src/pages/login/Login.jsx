@@ -9,7 +9,6 @@ export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [user, setUser] = useContext(UserContext);
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -26,7 +25,6 @@ export const Login = () => {
         withCredentials: true,
       })
       .then((res) => {
-        setUser(res.data);
         window.location.replace("/");
       })
       .catch((err) => {

@@ -1,11 +1,26 @@
 import "./App.scss";
-import { createContext, useState } from "react";
+import { useEffect, useState } from "react";
 import { Main, Login, Post, User, SignUp, Logout } from "./pages/";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { UserContext } from "./Contexts.js";
+import axios from "axios";
 
 function App() {
   const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/account`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        setUser(res.data);
+      })
+      .catch((err) => {
+        setUser(null);
+        console.log("User not logged in");
+      });
+  });
 
   return (
     <BrowserRouter>

@@ -48,14 +48,12 @@ export const SignUp = () => {
       },
     };
     if (password == secondPassword) {
-      console.log(process.env.REACT_APP_API_URL);
       axios
-        .post(`${process.env.REACT_APP_API_URL}/signup`, requestOptions)
+        .post(`${process.env.REACT_APP_API_URL}/signup`, requestOptions, {
+          withCredentials: true,
+        })
         .then((res) => {
-          console.log("error");
-          if (res.status == 201) {
-            window.location.href = process.env.REACT_APP_BASE_URL;
-          }
+          window.location.replace("/");
         })
         .catch((err) => {
           handleErrors(err);

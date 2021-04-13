@@ -32,9 +32,9 @@ export const AuthRequired = (props) => {
   }
 
   //props.reverse XOR loggedIn
-  if (props.reverse ^ loggedIn) {
-    return props.children;
-  } else {
-    return null;
-  }
+  // if (props.reverse ^ loggedIn) {
+  return props.children;
+  // } else {
+  //   return null;
+  // }
 };
