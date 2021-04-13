@@ -12,29 +12,46 @@ export const Post = () => {
   let { id } = useParams();
   const [data, setData] = useState(null);
   const [comments, setComments] = useState();
+  const [replyID, setReplyID] = useState();
+  const [replyUser, setReplyUser] = useState();
 
-  useEffect(() => {
-    // Get post data
-    axios
-      .get(`http://localhost:5000/post/${id}`)
-      .then((res) => {
-        setData(res.data);
-        console.log(res.data);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+  const onReply = (cid, username) => {
+    setReplyUser(username);
+    setReplyID(cid);
+    const commentInput = document.getElementById("comment-input");
+    commentInput.focus();
+  };
 
+  const getComments = () => {
     // Get comments list
     axios
-      .get(`http://localhost:5000/post/${id}/comments`)
+      .get(`${process.env.REACT_APP_API_URL}/post/${id}/comments`)
       .then((res) => {
         setComments(res.data);
       })
       .catch((err) => {
-        console.error(err);
+        window.alert(err.response.data.error);
       });
-  }, [id]);
+  };
+
+  const onCommentSent = () => {
+    getComments();
+    setReplyUser(null);
+    setReplyID(null);
+  };
+
+  useEffect(() => {
+    // Get post data
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/post/${id}`)
+      .then((res) => {
+        setData(res.data);
+      })
+      .catch((err) => {
+        window.alert(err.response.data.error);
+      });
+    getComments();
+  }, [id, getComments]);
 
   return (
     <>
@@ -42,12 +59,17 @@ export const Post = () => {
       <MainContent>
         <Content>{data ? <PostCard post={data} /> : null}</Content>
         <Content>
-          <NewComment />
+          <NewComment
+            postID={id}
+            onSend={onCommentSent}
+            parentID={replyID}
+            parentUser={replyUser}
+          />
         </Content>
         <Content>
           {comments && comments.length > 0 ? (
             comments.map((comment) => (
-              <Comment key={comment.cid} {...comment} />
+              <Comment key={comment.cid} onReply={onReply} {...comment} />
             ))
           ) : (
             <p className="no-comments">No Comments</p>

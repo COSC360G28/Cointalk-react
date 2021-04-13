@@ -4,14 +4,38 @@ import { Connection } from './database';
 import { upload } from './multer';
 import { formatComments } from './functions';
 import cors from 'cors';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+var session = require('express-session');
+declare module 'express-session' {
+    export interface SessionData {
+        uid: number;
+    }
+}
 
 const app = express();
 
 
-// Middleware app.use(express.json());
+app.use(express.json());
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
-app.use(cors());
+app.set('trust proxy', 1);
+app.use(cors({ credentials: true, origin: process.env.APP_BASE_URL }));
+app.use(
+    session({
+        secret: '51egt56get546t651et61',
+        saveUninitialized: true,
+        resave: true,
+        httpOnly: false,
+        cookie: {
+            secure: false,
+            maxAge: 8 * 60 * 60 * 1000, // 8 hours
+        },
+    }),
+);
 
 // *** TEST ENDPOINTS ***
 
@@ -181,24 +205,161 @@ app.get('/user/:id', (req, res) => {
 
 });
 
+// Get Logged in User Account
+app.get('/account', (req, res) => {
+    if (req.session && req.session.uid) {
+        const db = new Connection();
+        const conn = db.getConnection();
+        conn.query(`SELECT username, uid, email, admin, accountAvatarURL FROM account WHERE ${req.session.uid}=uid`)
+            .then((result) => {
+                res.status(200).send(result.rows[0]);
+            })
+            .catch((err) => {
+                res.status(404).send('Error: User not found');
+            })
+            .finally(() => {
+                db.disconnect();
+            });
+    } else {
+        res.status(401).send('Error: Not logged in');
+    }
+});
+
 // *** POST ENDPOINTS ***
 
 // Login
 app.post('/login', (req, res) => {
-    // var user = req.body.user;
-    // var password = req.body.password;
+
+    var email = req.body.body.email;
+    var password = req.body.body.password;
+
+    const db = new Connection();
+    const conn = db.getConnection();
+    conn.query(
+        `SELECT username, uid, email, admin, accountAvatarURL FROM account WHERE account.email = '${email}' AND account.password = '${password}' ORDER BY uid DESC LIMIT 1`,
+    )
+        .then((result) => {
+            if (result.rows.length > 0) {
+                //Example how to get query results
+                const user = result.rows[0];
+                req.session.uid = user.uid;
+                req.session.save(() => {
+                    res.status(200).send(user);
+                });
+            } else {
+                res.status(401).send('Bad Credentials.');
+            }
+        })
+        .catch((err) => {
+            res.status(400).send(err);
+        })
+        .finally(() => {
+            db.disconnect();
+        });
 
 });
 
 // Sign Up
-app.post('/signup', upload.single('profile-image'), (req, res, next) => {
-    console.log(req.file, req.body);
+app.post('/signup', (req, res, next) => {
+    const username = req.body.body.username;
+    const email = req.body.body.email;
+    const password = req.body.body.password;
+
+    if (!username) {
+        res.status(400).send({ field: 'username', message: 'is required.' });
+    } else if (!email) {
+        res.status(400).send({ field: 'email', message: 'is required.' });
+    } else if (!password) {
+        res.status(400).send({ field: 'password', message: 'is required.' });
+    } else if (username.length < 5) {
+        res.status(400).send({ field: 'username', message: 'is too short. Must be at least 5 characters long.' });
+    } else if (username.length > 20) {
+        res.status(400).send({ field: 'username', message: 'is too long. Must be less than 20 characters.' });
+    } else if (email.length < 5) {
+        res.status(400).send({ field: 'email', message: 'is too short. Must be at least 5 characters long.' });
+    } else if (email.length > 50) {
+        res.status(400).send({ field: 'email', message: 'is too long. Must be less than 50 characters.' });
+    } else if (password.length < 6) {
+        res.status(400).send({ field: 'password', message: 'is too short. Must be at least 6 characters long.' });
+    } else if (password.length > 30) {
+        res.status(400).send({ field: 'password', message: 'is too long. Must be less than 30 characters.' });
+    } else {
+        const date = Math.round(Date.now() / 1000);
+        const db = new Connection();
+        const conn = db.getConnection();
+        conn.query(
+            `INSERT INTO account(username, password, email, dateCreated, admin) VALUES ('${username}', '${password}', '${email}', to_timestamp(${date}), FALSE) RETURNING username, uid, email, admin, accountAvatarURL`,
+        )
+            .then((result) => {
+                const user = result.rows[0];
+                req.session.uid = user.uid;
+                res.status(201).send(user);
+            })
+            .catch((err) => {
+                res.status(409).send({
+                    field: 'secondPassword',
+                    message: 'An account already exists with this email or username',
+                });
+            })
+            .finally(() => {
+                db.disconnect();
+            });
+    }
+});
+
+//Check tell front end if the user is logged in
+app.post('/check-auth-status', (req, res) => {
+    if (req.session && req.session.uid) {
+        res.status(200).send({ loggedIn: 'loggedIn' });
+    } else {
+        res.status(200).send({ loggedIn: 'loggedOut' });
+    }
+});
+
+//Log out
+app.post('/logout', (req, res) => {
+    if (req.session) {
+        req.session.destroy((err) => {
+            if (err) {
+                res.status(400).send({ loggedIn: 'loggedIn' });
+            } else {
+                res.status(200).send({ loggedIn: 'loggedIn' });
+            }
+        });
+    }
+});
+
+//used to upload a profile picture for an account
+app.post('/uploadProfileImage', upload.single('profile-image'), (req, res, next) => {
     res.send('TODO');
 });
 
 // Create Comment
 app.post('/comment', (req, res) => {
-    res.send('TODO');
+    if (!req.session?.uid) {
+        res.status(401).send({ error: 'Error: Must  be logged in for this operation.' });
+    } else if (!req.body?.postID) {
+        res.status(400).send({ error: 'Error: No postID given' });
+    } else if (!req.body?.content) {
+        res.status(400).send({ error: 'Error: No content given' });
+    } else {
+        const db = new Connection();
+        const conn = db.getConnection();
+        const date = new Date().toISOString();
+        const parentID = req.body.parentID || null;
+        const { postID, content } = req.body;
+        const query = parentID
+            ? `INSERT INTO comment(content, userID, score, date, mainPostID, parentID) VALUES ('${content}', ${req.session.uid}, 0, '${date}', ${postID}, ${parentID})`
+            : `INSERT INTO comment(content, userID, score, date, mainPostID) VALUES ('${content}', ${req.session.uid}, 0, '${date}', ${postID})`;
+
+        conn.query(query)
+            .then(() => {
+                res.status(200).send('Comment posted successfully');
+            })
+            .catch(() => {
+                res.status(400).send("Error: Couldn't add comment to the database.");
+            });
+    }
 });
 
 // Create Post

@@ -2,6 +2,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300&display=swap");
 
 $aqua: #41ead4;
+$grey: #7e7e7e;
 
 nav {
   height: 80px;
@@ -16,6 +17,18 @@ nav {
     font-size: 48px;
     font-family: "Monoton";
     font-weight: 200;
+  }
+
+  .avatar {
+    width: 30px;
+    height: 30px;
+    margin: 20px;
+    margin-left: auto;
+    fill: $grey;
+
+    &:hover {
+      cursor: pointer;
+    }
   }
 
   .login-desktop {

@@ -22,7 +22,7 @@ export const PostPreview = ({
         <img
           onClick={goToPost}
           className="post-preview-image"
-          src={image}
+          src={process.env.REACT_APP_API_URL + "/image/" + image}
           alt="Post"
         />
       ) : null}

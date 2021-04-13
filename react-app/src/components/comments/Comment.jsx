@@ -3,32 +3,38 @@ import "./styles.scss";
 import { ReactComponent as UserIcon } from "../../assets/user.svg";
 import { ReactComponent as ReplyIcon } from "../../assets/reply-fill.svg";
 
-export const Comment = ({ depth = 0, username, content, cid, children }) => {
+export const Comment = ({
+  depth = 0,
+  username,
+  content,
+  cid,
+  children,
+  onReply,
+}) => {
+  const goToUser = () => {
+    window.location.href = `/user/${username}`;
+  };
+
   return (
     <div className="comment">
       <div className="comment-user-info">
-        <UserIcon
-          onClick={() => {
-            // TODO: Navigate to user profile
-          }}
-        />
-        <p
-          onClick={() => {
-            // TODO: Navigate to user profile
-          }}
-        >
-          {username}
-        </p>
+        <UserIcon onClick={goToUser} />
+        <p onClick={goToUser}>{username}</p>
         <ReplyIcon
           onClick={() => {
-            // TODO: Open reply input
+            onReply(cid, username);
           }}
         />
       </div>
       <p className="comment-text">{content}</p>
       <div className="replies">
         {children?.map((child) => (
-          <Comment key={child.cid} depth={depth + 1} {...child} />
+          <Comment
+            key={child.cid}
+            onReply={onReply}
+            depth={depth + 1}
+            {...child}
+          />
         ))}
       </div>
     </div>
