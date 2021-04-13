@@ -80,6 +80,7 @@ app.get('/posts', (req, res) => {
     // Query Params
     const pageCount = 10;
     const page = (req.query.page || 0) as number;
+    const category = (req.query.category || 'ETH') as string;
     const sortBy = (req.query.sortBy || 'NEW') as string;
 
     // Create Connection to DB
@@ -92,7 +93,7 @@ app.get('/posts', (req, res) => {
     if (sortBy.toUpperCase() === 'NEW') {
         // Return Posts by postdate
         conn.query(
-            `SELECT * FROM post, account WHERE post.userid = account.uid ORDER BY date DESC LIMIT ${pageCount} OFFSET ${
+            `SELECT * FROM post, account WHERE post.userid = account.uid AND post.coin='${category}' ORDER BY date DESC LIMIT ${pageCount} OFFSET ${
                 page * pageCount
             }`,
         )
@@ -107,7 +108,7 @@ app.get('/posts', (req, res) => {
     } else if (sortBy.toUpperCase() === 'HOT') {
         // Return Posts by score, then postdate
         conn.query(
-            `SELECT * FROM post, account WHERE post.userid = account.uid ORDER BY score DESC, date DESC LIMIT ${pageCount} OFFSET ${
+            `SELECT * FROM post, account WHERE post.userid = account.uid AND post.coin='${category}' ORDER BY score DESC, date DESC LIMIT ${pageCount} OFFSET ${
                 page * pageCount
             }`,
         )

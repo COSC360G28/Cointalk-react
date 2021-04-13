@@ -14,15 +14,16 @@ export const Main = () => {
 
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/posts?sortBy=${sort}&page=${page}`)
+      .get(
+        `${process.env.REACT_APP_API_URL}/posts?sortBy=${sort}&page=${page}&category=${category}`
+      )
       .then((res) => {
-        console.log(res.data);
         setPosts(res.data);
       })
       .catch((err) => {
         console.error(err);
       });
-  }, [sort, page]);
+  }, [sort, page, category]);
 
   return (
     <>
