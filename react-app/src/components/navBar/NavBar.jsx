@@ -3,7 +3,6 @@ import "./styles.scss";
 import { ReactComponent as SignIn } from "../../assets/box-arrow-in-right.svg";
 import { Button } from "../button/Button";
 import { ReactComponent as DefaultAvatar } from "../../assets/user.svg";
-import { AuthRequired } from "../authRequired/AuthRequired";
 import { UserContext } from "../../Contexts.js";
 
 export const NavBar = () => {
@@ -35,8 +34,14 @@ export const NavBar = () => {
           <>
             <div className="login-desktop">
               <a href="/login" className="sign-in">
-                Sign up
+                Log In
               </a>
+              <Button
+                action={() => {
+                  window.location.replace("/signup");
+                }}
+                text="Sign Up"
+              />
             </div>
             <a href="/login" className="login-mobile">
               <SignIn />
