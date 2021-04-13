@@ -180,6 +180,26 @@ app.get('/user/:id', (req, res) => {
     res.send('TODO');
 });
 
+// Get Logged in User Account
+app.get('/account', (req, res) => {
+    if (req.session && req.session.uid) {
+        const db = new Connection();
+        const conn = db.getConnection();
+        conn.query(`SELECT username, uid, email, admin, accountAvatarURL FROM account WHERE ${req.session.uid}=uid`)
+            .then((result) => {
+                res.status(200).send(result.rows[0]);
+            })
+            .catch((err) => {
+                res.status(404).send('Error: User not found');
+            })
+            .finally(() => {
+                db.disconnect();
+            });
+    } else {
+        res.status(401).send('Error: Not logged in');
+    }
+});
+
 // *** POST ENDPOINTS ***
 
 // Login
