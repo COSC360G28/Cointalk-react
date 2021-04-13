@@ -7,6 +7,7 @@ import cors from 'cors';
 
 const app = express();
 
+
 // Middleware app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
@@ -131,7 +132,10 @@ app.get('/post/:id', (req, res) => {
     const postID = req.params.id;
 
     // Return 400 if ID is not defined
-    if (!postID) res.status(400).send('Error: No post ID given');
+    if (!postID){
+        res.status(400).send('Error: No post ID given');
+        return null;
+    } 
 
     // Create connection to DB
     const db = new Connection();
@@ -150,17 +154,40 @@ app.get('/post/:id', (req, res) => {
         });
 });
 
-// Get User
+// Gets the user based on UID
 app.get('/user/:id', (req, res) => {
+    const userID = req.params.id;
     // userID = req.params.id
-    res.send('TODO');
+
+        // Return 400 if ID is not defined
+        if (!userID) {res.status(400).send('Error: No User ID given'); 
+    return null;
+    }
+    // Create connection to DB
+    const db = new Connection();
+    const conn = db.getConnection();
+
+    conn.query(`SELECT username, password FROM account WHERE uid = ${userID}`)
+        .then((result) => {
+            db.disconnect();
+            // Return result with status 200
+            res.status(200).send(result.rows[0]);
+        })
+        .catch((err) => {
+            db.disconnect();
+            // Return 400 if post was not found
+            res.status(400).send(err);
+        });
+
 });
 
 // *** POST ENDPOINTS ***
 
 // Login
 app.post('/login', (req, res) => {
-    res.send('TODO');
+    // var user = req.body.user;
+    // var password = req.body.password;
+
 });
 
 // Sign Up
@@ -177,11 +204,13 @@ app.post('/comment', (req, res) => {
 // Create Post
 app.post('/post', (req, res) => {
     res.send('TODO');
+
 });
 
 // Like Post
 app.post('/like', (req, res) => {
     res.send('TODO');
+
 });
 
 // Request Password Reset

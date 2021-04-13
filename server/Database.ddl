@@ -88,3 +88,9 @@ INSERT INTO comment(content, userID, score, date, mainPostID, parentID) VALUES (
 INSERT INTO comment(content, userID, score, date, mainPostID, parentID) VALUES ('Absolutely!', 1, 1, '2021-03-22 07:44:22', 3, 1);
 INSERT INTO comment(content, userID, score, date, mainPostID, parentID) VALUES ('Glad you agree!', 3, 2, '2021-03-23 13:11:54', 3, 2);
 INSERT INTO comment(content, userID, score, date, mainPostID) VALUES ('yeah it''s too spooky for me', 4, 0, '2021-03-24 18:33:21', 3);
+
+
+INSERT INTO postLiked(accountID, postID) VALUES (2, 2);
+
+
+
