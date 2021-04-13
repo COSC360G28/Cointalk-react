@@ -20,7 +20,7 @@ function App() {
         setUser(null);
         console.log("User not logged in");
       });
-  });
+  }, []);
 
   return (
     <BrowserRouter>

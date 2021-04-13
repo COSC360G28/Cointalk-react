@@ -40,25 +40,25 @@ export const Stars = ({ score, postId }) => {
 
     useEffect(() => {
         checkLiked();
-      });
+    }, []);
 
     function checkLiked() {
         axios
-        .post(
-            `${process.env.REACT_APP_API_URL}/check-post-like`,
-            { pid: postId },
-            { withCredentials: true }
-        )
-        .then((res) => {
-            if (res.data.liked == "postedLiked") {
-                setSelected(true);
-            } else {
-                setSelected(false);
-            }
-        })
-        .catch((err) => {
-            console.error(err);
-        });
+            .post(
+                `${process.env.REACT_APP_API_URL}/check-post-like`,
+                { pid: postId },
+                { withCredentials: true }
+            )
+            .then((res) => {
+                if (res.data.liked == "postedLiked") {
+                    setSelected(true);
+                } else {
+                    setSelected(false);
+                }
+            })
+            .catch((err) => {
+                console.error(err);
+            });
     }
 
     return (
