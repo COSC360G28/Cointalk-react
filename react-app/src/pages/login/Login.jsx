@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import "./styles.scss";
 import { Button } from "../../components/button/Button";
 import { UserAccessForm } from "../../components/userAccessForm/UserAccessForm";
 import axios from "axios";
+import { UserContext } from "../../Contexts.js";
 
 export const Login = () => {
   const [email, setEmail] = useState("");

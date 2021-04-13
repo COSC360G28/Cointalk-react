@@ -1,44 +1,54 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./styles.scss";
 import { ReactComponent as SignIn } from "../../assets/box-arrow-in-right.svg";
 import { Button } from "../button/Button";
-import { AuthRequired } from "../authRequired/AuthRequired"
+import { ReactComponent as DefaultAvatar } from "../../assets/user.svg";
+import { UserContext } from "../../Contexts.js";
 
 export const NavBar = () => {
+  const [user] = useContext(UserContext);
+
   return (
     <>
-      <AuthRequired reverse>
-        <nav>
-          <h1 href="/">COINTALK</h1>
+      <nav>
+        <h1 href="/">COINTALK</h1>
+        {user ? (
+          user.accountAvatarURL ? (
+            <img
+              alt="avatar"
+              className="avatar"
+              onClick={() => {
+                window.location.replace("/logout");
+              }}
+              src={user.accountAvatarURL}
+            />
+          ) : (
+            <DefaultAvatar
+              className="avatar"
+              onClick={() => {
+                window.location.replace("/logout");
+              }}
+            />
+          )
+        ) : (
+          <>
             <div className="login-desktop">
               <a href="/login" className="sign-in">
-                Sign In
+                Log In
               </a>
               <Button
-                text="Sign Up"
                 action={() => {
-                  window.location.href = "/signup";
+                  window.location.replace("/signup");
                 }}
+                text="Sign Up"
               />
             </div>
             <a href="/login" className="login-mobile">
               <SignIn />
             </a>
-        </nav>
-      </AuthRequired>
-      <AuthRequired>
-        <nav>
-            <h1 href="/">COINTALK</h1>
-              <div className="login-desktop">
-                <a href="/logout" className="sign-in">
-                  Logout
-                </a>
-              </div>
-              <a href="/logout" className="login-mobile">
-                <SignIn />
-              </a>
-          </nav>
-      </AuthRequired>
+          </>
+        )}
+      </nav>
     </>
   );
 };

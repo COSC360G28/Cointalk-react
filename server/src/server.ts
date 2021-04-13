@@ -17,8 +17,9 @@ declare module 'express-session' {
 
 const app = express();
 
-// Middleware
+
 app.use(express.json());
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
 app.set('trust proxy', 1);
@@ -155,7 +156,10 @@ app.get('/post/:id', (req, res) => {
     const postID = req.params.id;
 
     // Return 400 if ID is not defined
-    if (!postID) res.status(400).send('Error: No post ID given');
+    if (!postID){
+        res.status(400).send('Error: No post ID given');
+        return null;
+    } 
 
     // Create connection to DB
     const db = new Connection();
@@ -174,30 +178,73 @@ app.get('/post/:id', (req, res) => {
         });
 });
 
-// Get User
+// Gets the user based on UID
 app.get('/user/:id', (req, res) => {
+    const userID = req.params.id;
     // userID = req.params.id
-    res.send('TODO');
+
+        // Return 400 if ID is not defined
+        if (!userID) {res.status(400).send('Error: No User ID given'); 
+    return null;
+    }
+    // Create connection to DB
+    const db = new Connection();
+    const conn = db.getConnection();
+
+    conn.query(`SELECT username, password FROM account WHERE uid = ${userID}`)
+        .then((result) => {
+            db.disconnect();
+            // Return result with status 200
+            res.status(200).send(result.rows[0]);
+        })
+        .catch((err) => {
+            db.disconnect();
+            // Return 400 if post was not found
+            res.status(400).send(err);
+        });
+
+});
+
+// Get Logged in User Account
+app.get('/account', (req, res) => {
+    if (req.session && req.session.uid) {
+        const db = new Connection();
+        const conn = db.getConnection();
+        conn.query(`SELECT username, uid, email, admin, accountAvatarURL FROM account WHERE ${req.session.uid}=uid`)
+            .then((result) => {
+                res.status(200).send(result.rows[0]);
+            })
+            .catch((err) => {
+                res.status(404).send('Error: User not found');
+            })
+            .finally(() => {
+                db.disconnect();
+            });
+    } else {
+        res.status(401).send('Error: Not logged in');
+    }
 });
 
 // *** POST ENDPOINTS ***
 
 // Login
 app.post('/login', (req, res) => {
+
     var email = req.body.body.email;
     var password = req.body.body.password;
 
     const db = new Connection();
     const conn = db.getConnection();
     conn.query(
-        `SELECT username, uid FROM account WHERE account.email = '${email}' AND account.password = '${password}' ORDER BY uid DESC LIMIT 1`,
+        `SELECT username, uid, email, admin, accountAvatarURL FROM account WHERE account.email = '${email}' AND account.password = '${password}' ORDER BY uid DESC LIMIT 1`,
     )
         .then((result) => {
             if (result.rows.length > 0) {
                 //Example how to get query results
-                req.session.uid = result.rows[0].uid;
+                const user = result.rows[0];
+                req.session.uid = user.uid;
                 req.session.save(() => {
-                    res.status(200).send('Logged In.');
+                    res.status(200).send(user);
                 });
             } else {
                 res.status(401).send('Bad Credentials.');
@@ -209,6 +256,7 @@ app.post('/login', (req, res) => {
         .finally(() => {
             db.disconnect();
         });
+
 });
 
 // Sign Up
@@ -240,11 +288,12 @@ app.post('/signup', (req, res, next) => {
         const db = new Connection();
         const conn = db.getConnection();
         conn.query(
-            `INSERT INTO account(username, password, email, dateCreated, admin) VALUES ('${username}', '${password}', '${email}', to_timestamp(${date}), FALSE) RETURNING uid`,
+            `INSERT INTO account(username, password, email, dateCreated, admin) VALUES ('${username}', '${password}', '${email}', to_timestamp(${date}), FALSE) RETURNING username, uid, email, admin, accountAvatarURL`,
         )
             .then((result) => {
-                req.session.uid = result.rows[0].uid;
-                res.status(201).send('Account created successfully');
+                const user = result.rows[0];
+                req.session.uid = user.uid;
+                res.status(201).send(user);
             })
             .catch((err) => {
                 res.status(409).send({
@@ -316,6 +365,7 @@ app.post('/comment', (req, res) => {
 // Create Post
 app.post('/post', (req, res) => {
     res.send('TODO');
+
 });
 
 /*// Like Post
@@ -459,6 +509,7 @@ app.post('/unlike-post', (req, res) => {
 // Like Post
 app.post('/like', (req, res) => {
 
+
     const userId = req.session.uid; //Change to req.session.id
     const postId = req.body.pid; //Change to .body.pid 
     // Return 400 if ID is not defined
@@ -563,7 +614,6 @@ app.post('/post-like-count', (req, res) => {
         .finally(() => {
             db.disconnect();
         });
-
 });
 
 // Request Password Reset
