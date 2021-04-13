@@ -11,21 +11,15 @@ export const Comment = ({
   children,
   onReply,
 }) => {
+  const goToUser = () => {
+    window.location.href = `/user/${username}`;
+  };
+
   return (
     <div className="comment">
       <div className="comment-user-info">
-        <UserIcon
-          onClick={() => {
-            // TODO: Navigate to user profile
-          }}
-        />
-        <p
-          onClick={() => {
-            // TODO: Navigate to user profile
-          }}
-        >
-          {username}
-        </p>
+        <UserIcon onClick={goToUser} />
+        <p onClick={goToUser}>{username}</p>
         <ReplyIcon
           onClick={() => {
             onReply(cid, username);
