@@ -190,14 +190,15 @@ app.post('/login', (req, res) => {
     const db = new Connection();
     const conn = db.getConnection();
     conn.query(
-        `SELECT username, uid FROM account WHERE account.email = '${email}' AND account.password = '${password}' ORDER BY uid DESC LIMIT 1`,
+        `SELECT username, uid, email, admin, accountAvatarURL FROM account WHERE account.email = '${email}' AND account.password = '${password}' ORDER BY uid DESC LIMIT 1`,
     )
         .then((result) => {
             if (result.rows.length > 0) {
                 //Example how to get query results
-                req.session.uid = result.rows[0].uid;
+                const user = result.rows[0];
+                req.session.uid = user.uid;
                 req.session.save(() => {
-                    res.status(200).send('Logged In.');
+                    res.status(200).send(user);
                 });
             } else {
                 res.status(401).send('Bad Credentials.');
@@ -240,11 +241,12 @@ app.post('/signup', (req, res, next) => {
         const db = new Connection();
         const conn = db.getConnection();
         conn.query(
-            `INSERT INTO account(username, password, email, dateCreated, admin) VALUES ('${username}', '${password}', '${email}', to_timestamp(${date}), FALSE) RETURNING uid`,
+            `INSERT INTO account(username, password, email, dateCreated, admin) VALUES ('${username}', '${password}', '${email}', to_timestamp(${date}), FALSE) RETURNING username, uid, email, admin, accountAvatarURL`,
         )
             .then((result) => {
-                req.session.uid = result.rows[0].uid;
-                res.status(201).send('Account created successfully');
+                const user = result.rows[0];
+                req.session.uid = user.uid;
+                res.status(201).send(user);
             })
             .catch((err) => {
                 res.status(409).send({
