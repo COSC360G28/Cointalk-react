@@ -79,10 +79,10 @@ INSERT INTO account(username, password, email, dateCreated, admin) VALUES ('arno
 INSERT INTO account(username, password, email, dateCreated, admin) VALUES ('james', '123', 'james@test.com', '2021-03-20 10:36:01', FALSE);
 INSERT INTO account(username, password, email, dateCreated, admin) VALUES ('bobby', 'iforgot', 'bobby@test.com', '2021-03-21 19:46:47', FALSE);
 
-INSERT INTO post(title, text, userID, date, type, score, coin) VALUES('Testing of posts BTC', 'This is a test of the posting system, hopefully it works well in Bitcoin', 1, '2021-03-15 01:58:59', 'text', 3, 'BTC');
-INSERT INTO post(title, text, userID, date, type, score, coin) VALUES('Testing of posts ETH', 'This is a test of the posting system, hopefully it works well in Etherium', 1, '2021-03-15 05:32:12', 'text', 3, 'ETH');
-INSERT INTO post(title, text, userID, date, type, score, coin) VALUES('Newcomer''s Beware!', 'Cryptos are not for everyone and you should be ready to lose money if you''re not careful!', 2, '2021-03-16 09:59:24', 'text', 1, 'BTC');
-INSERT INTO post(title, image, text, userID, date, type, score, coin) VALUES('Newcomer''s Beware!', 'test-image.png', 'Cryptos are not for everyone and you should be ready to lose money if you''re not careful!', 2, '2021-03-16 09:59:24', 'pic', 1, 'BTC');
+INSERT INTO post(title, text, userID, date, type, score, coin) VALUES('Testing of posts BTC', 'This is a test of the posting system, hopefully it works well in Bitcoin', 1, '2021-03-15 01:58:59', 'text', 1, 'BTC');
+INSERT INTO post(title, text, userID, date, type, score, coin) VALUES('Testing of posts ETH', 'This is a test of the posting system, hopefully it works well in Etherium', 1, '2021-03-15 05:32:12', 'text', 0, 'ETH');
+INSERT INTO post(title, text, userID, date, type, score, coin) VALUES('Newcomer''s Beware!', 'Cryptos are not for everyone and you should be ready to lose money if you''re not careful!', 2, '2021-03-16 09:59:24', 'text', 0, 'BTC');
+INSERT INTO post(title, image, text, userID, date, type, score, coin) VALUES('Newcomer''s Beware!', 'test-image.png', 'Cryptos are not for everyone and you should be ready to lose money if you''re not careful!', 2, '2021-03-16 09:59:24', 'pic', 0, 'BTC');
 
 INSERT INTO comment(content, userID, score, date, mainPostID) VALUES ('Yeah but you can also make a lot of money :D', 3, 5, '2021-03-22 01:06:09', 3);
 INSERT INTO comment(content, userID, score, date, mainPostID, parentID) VALUES ('YUP', 2, 3, '2021-03-22 04:06:32', 3, 1);

@@ -33,6 +33,14 @@ export class Connection {
 
     resetConnection() {
         this.disconnect();
+        this.client = new Client({
+            user: process.env.DB_USER,
+            database: process.env.DB_NAME,
+            host: process.env.DB_HOST,
+            password: process.env.DB_PASS,
+            port: parseInt(<string>process.env.DB_PORT, 10),
+            query_timeout: 10000,
+        });
         this.connect();
         return this.client;
     }

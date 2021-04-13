@@ -404,58 +404,6 @@ app.post('/like-post', (req, res) => {
     }
 });
 
-// Like Post
-app.post('/like-post', (req, res) => {
-    if (req.session && req.session.uid) {
-        const db = new Connection();
-        var conn = db.getConnection();
-        //Check to see if user has liked the post already
-        conn.query(
-            `SELECT * FROM postLiked WHERE accountID=${req.session.uid} AND postID=${req.body.pid}`
-        )
-            .then((result) => {
-                if(result.rows.length == 0) {
-                    //If User has liked the post then update the postLiked Table
-                    conn = db.resetConnection();
-                    conn.query(
-                        `INSERT INTO postLiked(accountID, postID) VALUES (${req.session.uid}, ${req.body.pid})`
-                    )
-                        .then(() => {
-                            const message = updateLikeCount(req.body.pid);
-                            if(message == "Post table updated.") {
-                                res.status(200).send();
-                            } else {
-                                res.status(400).send(message);
-                            }
-                        })
-                        .catch((err) => {
-                            res.status(400).send({
-                                message: 'Unable to query database.',
-                            });
-                            return null;
-                        })
-                        .finally(() => {
-                            db.disconnect();
-                        });
-                } else {
-                    res.status(409).send("Post has already been liked by this user.");
-                    return null;
-                }
-            })
-            .catch((err) => {
-                res.status(400).send({
-                    message: 'Unable to query database.',
-                });
-                return null;
-            })
-            .finally(() => {
-                db.disconnect();
-            });
-    } else {
-        res.status(401).send("User needs to login before they can unlike posts.");
-    }
-});
-
 // Unlike Post
 app.post('/unlike-post', (req, res) => {
     if (req.session && req.session.uid) {
@@ -524,37 +472,39 @@ app.post('/like', (req, res) => {
     var conn = db.getConnection();
 
     //Checks to see if the user liked the post already
-    var query = `SELECT accountID, postID FROM postLiked WHERE postID = ${postId} AND accountID = ${postId}`; 
+    var query = `SELECT accountID, postID FROM postLiked WHERE postID = ${postId} AND accountID = ${userId}`; 
 
     conn.query(query)
         .then((result) => {
 
             //If the user has already liked the post, remove the row from table
             if(result.rows.length != 0){
-                conn = db.resetConnection();
+                const db2 = new Connection();
+                var conn2 = db2.getConnection();
                 var q1 = `DELETE FROM postLiked WHERE postID = ${postId} AND accountID = ${userId}`;
-                conn.query(q1).then(() =>{
+                conn2.query(q1).then(() =>{
                     res.status(200).send({message: "Post unliked, removed from DB", isLiked: false});
                     updateLikeCount(postId);
                 }).catch((err) => {
                     // Return 400 if post was not found
                     res.status(402).send(err);
-                })
+                }).finally(() => {
+                    db2.disconnect();
+                });
             }else{
                 //Else, Add to the table
-                conn = db.resetConnection();
+                const db2 = new Connection();
+                var conn2 = db2.getConnection();
                 var add = `INSERT INTO postLiked VALUES (${userId}, ${postId})`;
-                conn.query(add).then(()=>{
-                    var message = updateLikeCount(postId);
-                    if(message == "Post table updated.") {
-                        res.status(200).send({message: "User account liked the post. Liked added to the db", isLiked: true});
-                    } else {
-                        res.status(400).send(message);
-                    }
+                conn2.query(add).then(()=>{
+                    updateLikeCount(postId);
+                    res.status(200).send({message: "User account liked the post. Liked added to the db", isLiked: true});
                 }).catch((err) => {
                     // Return 400 if post was not found
                     res.status(401).send(err);
-                })
+                }).finally(() => {
+                    db2.disconnect();
+                });
             }
         })
         .catch((err) => {
@@ -564,10 +514,6 @@ app.post('/like', (req, res) => {
         .finally(() =>{
             db.disconnect();
         });
-
-
-
-
 });
 
 // Check to see if a user has already liked a post
@@ -622,8 +568,7 @@ app.post('/post/:id/edit', (req, res) => {
 });
 
 //After the postLiked Table is updated we retrieve the total number of likes to update the post table
-function updateLikeCount(pid: number): string {
-    var postNumberOfLikes = -99;
+function updateLikeCount(pid: number) {
     const db = new Connection();
     var conn = db.getConnection();
     conn.query(
@@ -631,29 +576,27 @@ function updateLikeCount(pid: number): string {
     )
         .then((result) => {
             //Update post table with the new number of likes
-            postNumberOfLikes = result.rows.length;
-            conn = db.resetConnection();
-            conn.query(
+            var postNumberOfLikes = result.rows.length;
+            const db2 = new Connection();
+            var conn2 = db2.getConnection();
+            conn2.query(
                 `UPDATE post SET score=${postNumberOfLikes} WHERE pid=${pid}`
             )
-                .then((result) => {
-                    return "Post table updated."
+                .then(() => {
+
                 })
                 .catch((err) => {
-                    return "Unable to query database.";
-                })
-                .finally(() => {
-                    db.disconnect();
+                    console.error(err);
+                }).finally(() => {
+                    db2.disconnect();
                 });
-
         })
         .catch((err) => {
-            return "Unable to access database.";
+            console.error(err);
         })
         .finally(() => {
             db.disconnect();
         });
-    return "End of server.updateLikeCount function reached.";
 }
 
 export { app };
