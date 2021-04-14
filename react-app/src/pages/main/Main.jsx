@@ -5,6 +5,7 @@ import { ScrollHeader } from "../../components/scrollHeader/ScrollHeader";
 import { NavBar } from "../../components/navBar/NavBar";
 import { PostPreview } from "../../components/postPreview/PostPreview";
 import { MainContent, Content } from "../../components/containers/Containers";
+import {CreatePost} from "../../components/createPost/CreatePost"
 
 export const Main = () => {
   const [category, setCategory] = useState("ETH");
@@ -29,6 +30,8 @@ export const Main = () => {
       <CategorySelector selected={category} setSelected={setCategory} />
       <ScrollHeader setSort={setSort} />
       <MainContent>
+      <CreatePost />
+
         {posts.map((post) => (
           <Content key={post.pid}>
             <PostPreview {...post} />
