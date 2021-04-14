@@ -3,19 +3,33 @@ import "./styles.scss";
 import { ReactComponent as Search } from "../../assets/search.svg";
 import { ReactComponent as Filter } from "../../assets/filter-left.svg";
 
-export const ScrollHeader = ({ setSort }) => {
-  const [value, setValue] = useState("");
+export const ScrollHeader = ({ setSort, setSearching }) => {
+  const [searchText, setSearchText] = useState("");
 
   const handleChange = (event) => {
-    setValue(event.target.value);
+    setSearchText(event.target.value);
+  };
+
+  const onSubmit = () => {
+    setSearching(searchText);
   };
 
   return (
     <div id="scroll-header">
       <div className="content">
         <div className="wrapper">
-          <Search />
-          <input type="text" placeholder="SEARCH" onChange={handleChange} />
+          <Search onClick={onSubmit} />
+          <input
+            type="text"
+            placeholder="SEARCH"
+            onChange={handleChange}
+            value={searchText}
+            onKeyDown={(e) => {
+              if (e.nativeEvent.key === "Enter") {
+                onSubmit();
+              }
+            }}
+          />
         </div>
         <div className="wrapper">
           <select

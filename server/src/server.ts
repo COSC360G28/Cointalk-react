@@ -82,6 +82,7 @@ app.get('/posts', (req, res) => {
     const page = (req.query.page || 0) as number;
     const category = (req.query.category || 'ETH') as string;
     const sortBy = (req.query.sortBy || 'NEW') as string;
+    const searchText = req.query.searchText || null;
 
     // Create Connection to DB
     const db = new Connection();
@@ -90,40 +91,24 @@ app.get('/posts', (req, res) => {
     // Return error if page is invalid
     if (page < 0) res.status(400).send('Error: Invalid page number.');
 
-    if (sortBy.toUpperCase() === 'NEW') {
-        // Return Posts by postdate
-        conn.query(
-            `SELECT * FROM post, account WHERE post.userid = account.uid AND post.coin='${category}' ORDER BY date DESC LIMIT ${pageCount} OFFSET ${
-                page * pageCount
-            }`,
-        )
-            .then((result) => {
-                db.disconnect();
-                res.status(200).send(result.rows);
-            })
-            .catch((err) => {
-                db.disconnect();
-                res.status(500).send(err);
-            });
-    } else if (sortBy.toUpperCase() === 'HOT') {
-        // Return Posts by score, then postdate
-        conn.query(
-            `SELECT * FROM post, account WHERE post.userid = account.uid AND post.coin='${category}' ORDER BY score DESC, date DESC LIMIT ${pageCount} OFFSET ${
-                page * pageCount
-            }`,
-        )
-            .then((result) => {
-                db.disconnect();
-                res.status(200).send(result.rows);
-            })
-            .catch((err) => {
-                db.disconnect();
-                res.status(500).send(err);
-            });
-    } else {
-        // Return error if sortBy is invalid
-        res.status(400).send('Error: Invalid sort Method');
-    }
+    // Return Posts by postdate
+    conn.query(
+        `SELECT * FROM post, account WHERE post.userID=account.uid AND post.coin='${category}' ${
+            searchText
+                ? `AND (post.title ILIKE '%${searchText}%' OR post.text ILIKE '%${searchText}%' OR account.email ILIKE '%${searchText}%' OR account.username ILIKE '%${searchText}%')`
+                : ''
+        } ORDER BY ${sortBy.toUpperCase() === 'NEW' ? '' : 'score DESC,'} date DESC LIMIT ${pageCount} OFFSET ${
+            page * pageCount
+        }`,
+    )
+        .then((result) => {
+            db.disconnect();
+            res.status(200).send(result.rows);
+        })
+        .catch((err) => {
+            db.disconnect();
+            res.status(500).send(err);
+        });
 });
 
 // Get Comments
