@@ -12,23 +12,26 @@ export const Main = () => {
   const [sort, setSort] = useState("NEW");
   const [page, setPage] = useState(0);
   const [posts, setPosts] = useState([]);
+  const [searchText, setSearchText] = useState("");
 
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/posts?sortBy=${sort}&page=${page}`)
+      .get(
+        `${process.env.REACT_APP_API_URL}/posts?sortBy=${sort}&page=${page}&category=${category}&searchText=${searchText}`
+      )
       .then((res) => {
         setPosts(res.data);
       })
       .catch((err) => {
         console.error(err);
       });
-  }, [sort, page]);
+  }, [sort, page, category, searchText]);
 
   return (
     <>
       <NavBar />
       <CategorySelector selected={category} setSelected={setCategory} />
-      <ScrollHeader setSort={setSort} />
+      <ScrollHeader setSort={setSort} setSearching={setSearchText} />
       <MainContent>
       <CreatePost />
 
