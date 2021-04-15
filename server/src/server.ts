@@ -512,8 +512,62 @@ app.post('/user/:id/ban', (req, res) => {
 
 // Remove Post
 app.post('/post/:id/remove', (req, res) => {
-    // post = req.params.id
-    res.send('todo');
+    if (req.session && req.session.uid) {
+        const post = req.params.id;
+        const db = new Connection();
+        const conn = db.getConnection();
+        conn.query(
+            `SELECT * FROM post WHERE userID=${req.session.uid} AND pid=${post}`
+        )
+            .then((result) => {
+                const db2 = new Connection();
+                const conn2 = db2.getConnection();
+                conn2.query(
+                    `SELECT * FROM account WHERE uid=${req.session.uid}`
+                )
+                    .then((result2) => {
+                        if(result.rows.length > 0 || result2.rows[0].admin) {
+                            const db3 = new Connection();
+                            const conn3 = db3.getConnection();
+                            conn3.query(
+                                `DELETE FROM post WHERE pid=${post}`
+                            )
+                                .then((result3) => {
+                                    res.status(200).send("Post deleted.");
+                                })
+                                .catch((err) => {
+                                    res.status(400).send({
+                                        message: 'Unable to query database.',
+                                    });
+                                })
+                                .finally(() => {
+                                    db3.disconnect();
+                                });
+                        } else {
+                            res.status(401).send("Not authorized to delete this post.");
+                        }
+
+                    })
+                    .catch((err) => {
+                        res.status(400).send({
+                            message: 'Unable to query database.',
+                        });
+                    })
+                    .finally(() => {
+                        db2.disconnect();
+                    });
+            })
+            .catch((err) => {
+                res.status(400).send({
+                    message: 'Unable to query database.',
+                });
+            })
+            .finally(() => {
+                db.disconnect();
+            });
+    } else {
+        res.status(401).send("User must be logged in to edit posts");
+    }
 });
 
 // Edit Post
@@ -571,6 +625,34 @@ app.post('/post/:id/isPostOwner', (req, res) => {
     }
 });
 
+// Returns { isAdmin: true } if the current user is an admin
+app.post('/isAdmin', (req, res) => {
+    if (req.session && req.session.uid) {
+        const db = new Connection();
+        const conn = db.getConnection();
+        conn.query(
+            `SELECT * FROM account WHERE uid=${req.session.uid}`
+        )
+            .then((result) => {
+                if(result.rows[0].admin) {
+                    res.status(200).send({isAdmin: true});
+                } else {
+                    res.status(200).send({isAdmin: false});
+                }
+            })
+            .catch((err) => {
+                res.status(400).send({
+                    message: 'Unable to query database.',
+                });
+            })
+            .finally(() => {
+                db.disconnect();
+            });
+    } else {
+        res.status(200).send({isAdmin: false});
+    }
+});
+
 //After the postLiked Table is updated we retrieve the total number of likes to update the post table
 function updateLikeCount(pid: number) {
     const db = new Connection();
@@ -581,8 +663,7 @@ function updateLikeCount(pid: number) {
             var postNumberOfLikes = result.rows.length;
             const db2 = new Connection();
             var conn2 = db2.getConnection();
-            conn2
-                .query(`UPDATE post SET score=${postNumberOfLikes} WHERE pid=${pid}`)
+            conn2.query(`UPDATE post SET score=${postNumberOfLikes} WHERE pid=${pid}`)
                 .then(() => {})
                 .catch((err) => {
                     console.error(err);
