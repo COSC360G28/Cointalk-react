@@ -4,10 +4,10 @@ import { ReactComponent as Pencil } from "../../assets/pencil.svg";
 import { ReactComponent as Check } from "../../assets/check2.svg";
 import axios from "axios";
 
-export const EditPostButton = ({ editGetter, editSetter }) => {
+export const EditPostButton = ({ editGetter, editToggle }) => {
 
     const toggleButton = () => {
-        editSetter();
+        editToggle();
     };
 
     //Query to see if the user has liked the post already

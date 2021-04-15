@@ -3,12 +3,14 @@ import { ReactComponent as UserIcon } from "../../assets/user.svg";
 import "./styles.scss";
 import { Stars } from "../stars/Stars";
 import { EditPostButton } from "../editPostButton/EditPostButton";
+import { DeletePostButton } from "../deletePostButton/DeletePostButton";
 import axios from "axios";
 
 export const PostCard = ({ post }) => {
   const [editing, setEditing] = useState(false);
   const [content, setContent] = useState(post.text);
   const [owner, setOwner] = useState(false);
+  const [admin, setAdmin] = useState(false);
 
   function toggleEditing() {
     if(editing) {
@@ -26,15 +28,22 @@ export const PostCard = ({ post }) => {
   }
 
   useEffect(() => {
-    axios
+      axios
         .post(`${process.env.REACT_APP_API_URL}/post/${post.pid}/isPostOwner`, {}, { withCredentials: true })
         .then((res) => {
-            console.log(res.data.isPostOwner);
-            setOwner(res.data.isPostOwner);
+          setOwner(res.data.isPostOwner);
         })
         .catch((err) => {
-            console.log(err);
+          console.log(err);
         });
+    axios
+      .post(`${process.env.REACT_APP_API_URL}/isAdmin`, {}, { withCredentials: true })
+      .then((res) => {
+          setAdmin(res.data.isAdmin);
+      })
+      .catch((err) => {
+          console.log(err);
+      });
   }, []);
 
   return (
@@ -51,8 +60,13 @@ export const PostCard = ({ post }) => {
           <UserIcon className="profile-image" />
         )}
         <h3>{post.username}</h3>
+        {(owner || admin) ?
+          <DeletePostButton postId={post.pid} />
+          :
+          <div className="delete-post-button-container" />
+        }
         {owner ?
-          <EditPostButton editGetter={editing} editSetter={toggleEditing} />
+          <EditPostButton editGetter={editing} editToggle={toggleEditing} />
           :
           <div className="edit-post-button-container" />
         }

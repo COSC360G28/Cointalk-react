@@ -52,7 +52,7 @@ CREATE TABLE comment (
 	parentID INT,
 	PRIMARY KEY (cid),
 	FOREIGN KEY (userID) REFERENCES account(uid) ON UPDATE CASCADE ON DELETE NO ACTION,
-	FOREIGN KEY (mainPostID) REFERENCES post(pid),
+	FOREIGN KEY (mainPostID) REFERENCES post(pid) ON DELETE CASCADE,
 	FOREIGN KEY (parentID) REFERENCES comment(cid)
 );
 
@@ -60,14 +60,14 @@ CREATE TABLE postLiked ( --any entries in here mean that the post was liked by t
 	accountID INT,
 	postID INT,
 	FOREIGN KEY (accountID) REFERENCES account(uid),
-	FOREIGN KEY (postID) REFERENCES post(pid)
+	FOREIGN KEY (postID) REFERENCES post(pid) ON DELETE CASCADE
 );
 
 CREATE TABLE commentLiked ( -- any entries in here mean that the comment was liked by the account
 	accountID INT,
 	commentID INT,
 	FOREIGN KEY (accountID) REFERENCES account(uid),
-	FOREIGN KEY (commentID) REFERENCES comment(cid)
+	FOREIGN KEY (commentID) REFERENCES comment(cid) ON DELETE CASCADE
 );
 
 INSERT INTO coin(name, abbreviation) VALUES ('Ethereum', 'ETH');
