@@ -30,7 +30,7 @@
 - [TODO] User password recovery (via email)
 - [DONE] Search for user by name, email or post
 - [TODO] Enable/disable users
-- [TODO] Edit/remove posts and comments
+- [DONE] Edit/remove posts and comments
 
 ## 5 of the following
 
