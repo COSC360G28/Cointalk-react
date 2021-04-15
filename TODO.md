@@ -25,13 +25,12 @@
 - [DONE] Register at the site by providing their name, e-mail and image
 - [IN PRORESS] Allow user login by providing user id and password
   - [TODO] Change "Email" prompt to "Username"
-- [IN PROGRESS] Create and comment when logged into the site
-  - [TODO] Create posts
+- [DONE] Create and comment when logged into the site
 - [TODO] Users are required to be able to view/edit their profile
 - [TODO] User password recovery (via email)
 - [DONE] Search for user by name, email or post
 - [TODO] Enable/disable users
-- [TODO] Edit/remove postsand comments
+- [TODO] Edit/remove posts and comments
 
 ## 5 of the following
 
