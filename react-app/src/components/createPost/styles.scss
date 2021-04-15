@@ -1,0 +1,18 @@
+$grey: #7e7e7e;
+
+.create-post-prompt {
+  display: flex;
+  flex-direction: row;
+  color: $grey;
+  align-items: center;
+  justify-content: flex-start;
+  text-decoration: none;
+
+  svg {
+    margin: 5px 10px;
+  }
+
+  p {
+    margin: 0;
+  }
+}

@@ -348,42 +348,48 @@ app.post('/comment', (req, res) => {
 });
 
 // Create Post
-app.post('/post', (req, res) => {
+app.post('/post', upload.single('image'), (req, res) => {
     const userId = req.session.uid;
 
     if (!req.session?.uid) {
         res.status(401).send({ error: 'Error: Must  be logged in for this operation.' });
+    } else {
+        const title = req.body.title;
+        const date = new Date().toISOString();
+        const postType = req.file ? 'pic' : 'text';
+        const content = req.body.text;
+        const image = req.file?.filename;
+        const coin = req.body.coin;
+
+        if (!title || !content || !coin) {
+            res.status(400).send('Error: Missing required fields');
+        } else {
+            const query =
+                postType === 'text'
+                    ? //If its a text post:
+                      `INSERT INTO post (title, userID, date, type, text, score, coin) VALUES('${title}', 2 , '${date}', '${postType}', '${content}', 0 ,'${coin}') RETURNING pid`
+                    : `INSERT INTO post (title, userID, date, type, image, text, score, coin) VALUES('${title}', ${userId}, '${date}', '${postType}', '${image}', '${content}', 0 ,'${coin}') RETURNING pid`;
+
+            // Create connection to DB
+            const db = new Connection();
+            var conn = db.getConnection();
+
+            conn.query(query)
+                .then((result) => {
+                    res.status(200).send({
+                        success: true,
+                        postID: result.rows[0].pid,
+                    });
+                })
+                .catch((err) => {
+                    // Return 400 if post was not added
+                    res.status(400).send(err);
+                })
+                .finally(() => {
+                    db.disconnect();
+                });
+        }
     }
-
-    const title = req.body.title;
-    const date = new Date().toISOString();
-    const type = req.body.type;
-    const content = req.body.content;
-    const image = '';
-    const coin = req.body.coin;
-
-    //If post is an image type or not TODO: Change to image URL
-    const query =
-        type == 'text'
-            ? //If its a text post:
-              `INSERT INTO post (title, userID, date, type, text, score, coin) VALUES('${title}', 2 , '${date}', '${type}', '${content}', 0 ,'${coin}')`
-            : `INSERT INTO post (title, userID, date, type, image, score, coin) VALUES('${title}', ${userId}, '${date}', '${type}', '${image}', 0 ,'${coin}')`;
-
-    // Create connection to DB
-    const db = new Connection();
-    var conn = db.getConnection();
-
-    conn.query(query)
-        .then((result) => {
-            res.status(200).send('Post added successfuly');
-        })
-        .catch((err) => {
-            // Return 400 if post was not added
-            res.status(400).send(err);
-        })
-        .finally(() => {
-            db.disconnect();
-        });
 });
 
 // Like Post
@@ -610,12 +616,9 @@ app.post('/post/:id/edit', (req, res) => {
         const post = req.params.id;
         const db = new Connection();
         const conn = db.getConnection();
-        conn.query(
-            `UPDATE post SET text='${req.body.newText}' WHERE pid=${post} AND userID=${req.session.uid}`,
-        )
+        conn.query(`UPDATE post SET text='${req.body.newText}' WHERE pid=${post} AND userID=${req.session.uid}`)
             .then((result) => {
-                res.status(200).send("Post Updated");
-
+                res.status(200).send('Post Updated');
             })
             .catch((err) => {
                 res.status(400).send({
@@ -626,7 +629,7 @@ app.post('/post/:id/edit', (req, res) => {
                 db.disconnect();
             });
     } else {
-        res.status(401).send("User must be logged in to edit posts");
+        res.status(401).send('User must be logged in to edit posts');
     }
 });
 
@@ -636,14 +639,12 @@ app.post('/post/:id/isPostOwner', (req, res) => {
         const post = req.params.id;
         const db = new Connection();
         const conn = db.getConnection();
-        conn.query(
-            `SELECT * FROM post WHERE pid=${post} AND userID=${req.session.uid}`
-        )
+        conn.query(`SELECT * FROM post WHERE pid=${post} AND userID=${req.session.uid}`)
             .then((result) => {
-                if(result.rows.length > 0) {
-                    res.status(200).send({isPostOwner: true});
+                if (result.rows.length > 0) {
+                    res.status(200).send({ isPostOwner: true });
                 } else {
-                    res.status(200).send({isPostOwner: false});
+                    res.status(200).send({ isPostOwner: false });
                 }
             })
             .catch((err) => {
@@ -655,7 +656,7 @@ app.post('/post/:id/isPostOwner', (req, res) => {
                 db.disconnect();
             });
     } else {
-        res.status(200).send({isPostOwner: false});
+        res.status(200).send({ isPostOwner: false });
     }
 });
 

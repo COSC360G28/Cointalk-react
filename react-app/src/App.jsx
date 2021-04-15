@@ -1,6 +1,6 @@
 import "./App.scss";
 import { useEffect, useState } from "react";
-import { Main, Login, Post, User, SignUp, Logout } from "./pages/";
+import { NewPost, Main, Login, Post, User, SignUp, Logout } from "./pages/";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { UserContext } from "./Contexts.js";
 import axios from "axios";
@@ -44,6 +44,9 @@ function App() {
             </Route>
             <Route path="/logout" exact>
               <Logout />
+            </Route>
+            <Route path="/newPost" exact>
+              <NewPost />
             </Route>
           </Switch>
         </UserContext.Provider>

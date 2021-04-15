@@ -4,3 +4,4 @@ export { Main } from "./main/Main";
 export { Post } from "./post/Post";
 export { SignUp } from "./signUp/SignUp";
 export { Logout } from "./logout/Logout";
+export { NewPost } from "./newPost/NewPost";
