@@ -17,7 +17,6 @@ declare module 'express-session' {
 
 const app = express();
 
-
 app.use(express.json());
 
 app.use(express.urlencoded({ extended: true }));
@@ -142,10 +141,10 @@ app.get('/post/:id', (req, res) => {
     const postID = req.params.id;
 
     // Return 400 if ID is not defined
-    if (!postID){
+    if (!postID) {
         res.status(400).send('Error: No post ID given');
         return null;
-    } 
+    }
 
     // Create connection to DB
     const db = new Connection();
@@ -169,9 +168,10 @@ app.get('/user/:id', (req, res) => {
     const userID = req.params.id;
     // userID = req.params.id
 
-        // Return 400 if ID is not defined
-        if (!userID) {res.status(400).send('Error: No User ID given'); 
-    return null;
+    // Return 400 if ID is not defined
+    if (!userID) {
+        res.status(400).send('Error: No User ID given');
+        return null;
     }
     // Create connection to DB
     const db = new Connection();
@@ -188,7 +188,6 @@ app.get('/user/:id', (req, res) => {
             // Return 400 if post was not found
             res.status(400).send(err);
         });
-
 });
 
 // Get Logged in User Account
@@ -215,7 +214,6 @@ app.get('/account', (req, res) => {
 
 // Login
 app.post('/login', (req, res) => {
-
     var email = req.body.body.email;
     var password = req.body.body.password;
 
@@ -242,14 +240,14 @@ app.post('/login', (req, res) => {
         .finally(() => {
             db.disconnect();
         });
-
 });
 
 // Sign Up
-app.post('/signup', (req, res, next) => {
-    const username = req.body.body.username;
-    const email = req.body.body.email;
-    const password = req.body.body.password;
+app.post('/signup', upload.single('profile-image'), (req, res, next) => {
+    const username = req.body.username;
+    const email = req.body.email;
+    const password = req.body.password;
+    const profileImg = req.file.filename || 'default-profile.png';
 
     if (!username) {
         res.status(400).send({ field: 'username', message: 'is required.' });
@@ -274,7 +272,7 @@ app.post('/signup', (req, res, next) => {
         const db = new Connection();
         const conn = db.getConnection();
         conn.query(
-            `INSERT INTO account(username, password, email, dateCreated, admin) VALUES ('${username}', '${password}', '${email}', to_timestamp(${date}), FALSE) RETURNING username, uid, email, admin, accountAvatarURL`,
+            `INSERT INTO account(username, password, email, dateCreated, admin, accountAvatarURL) VALUES ('${username}', '${password}', '${email}', to_timestamp(${date}), FALSE, '${profileImg}') RETURNING username, uid, email, admin, accountAvatarURL`,
         )
             .then((result) => {
                 const user = result.rows[0];
@@ -317,6 +315,7 @@ app.post('/logout', (req, res) => {
 
 //used to upload a profile picture for an account
 app.post('/uploadProfileImage', upload.single('profile-image'), (req, res, next) => {
+    console.log(req.file);
     res.send('TODO');
 });
 
@@ -350,108 +349,108 @@ app.post('/comment', (req, res) => {
 
 // Create Post
 app.post('/post', (req, res) => {
-    
-        const userId = req.session.uid;
+    const userId = req.session.uid;
 
+    if (!req.session?.uid) {
+        res.status(401).send({ error: 'Error: Must  be logged in for this operation.' });
+    }
 
-        if (!req.session?.uid) {
-            res.status(401).send({ error: 'Error: Must  be logged in for this operation.' });
-        }
+    const title = req.body.title;
+    const date = new Date().toISOString();
+    const type = req.body.type;
+    const content = req.body.content;
+    const image = '';
+    const coin = req.body.coin;
 
-        const title = req.body.title;
-        const date = new Date().toISOString();
-        const type = req.body.type;
-        const content = req.body.content;
-        const image = "";
-        const coin = req.body.coin;
-        
-        
-        //If post is an image type or not TODO: Change to image URL
-        const query = (type == "text")
-        //If its a text post:
-        ? `INSERT INTO post (title, userID, date, type, text, score, coin) VALUES('${title}', 2 , '${date}', '${type}', '${content}', 0 ,'${coin}')`
-        : `INSERT INTO post (title, userID, date, type, image, score, coin) VALUES('${title}', ${userId}, '${date}', '${type}', '${image}', 0 ,'${coin}')`;
-    
-        // Create connection to DB
-        const db = new Connection();
-        var conn = db.getConnection();
+    //If post is an image type or not TODO: Change to image URL
+    const query =
+        type == 'text'
+            ? //If its a text post:
+              `INSERT INTO post (title, userID, date, type, text, score, coin) VALUES('${title}', 2 , '${date}', '${type}', '${content}', 0 ,'${coin}')`
+            : `INSERT INTO post (title, userID, date, type, image, score, coin) VALUES('${title}', ${userId}, '${date}', '${type}', '${image}', 0 ,'${coin}')`;
 
-            conn.query(query)
-            .then((result) =>{
-            res.status(200).send("Post added successfuly");
+    // Create connection to DB
+    const db = new Connection();
+    var conn = db.getConnection();
 
-            }).catch((err) => {
-                // Return 400 if post was not added
-                res.status(400).send(err);
-            })
-            .finally(() =>{
-                db.disconnect();
-            });
-        
-        
-
-
-
+    conn.query(query)
+        .then((result) => {
+            res.status(200).send('Post added successfuly');
+        })
+        .catch((err) => {
+            // Return 400 if post was not added
+            res.status(400).send(err);
+        })
+        .finally(() => {
+            db.disconnect();
+        });
 });
-
 
 // Like Post
 app.post('/like', (req, res) => {
-
-
     const userId = req.session.uid; //Change to req.session.id
-    const postId = req.body.pid; //Change to .body.pid 
+    const postId = req.body.pid; //Change to .body.pid
     // Return 400 if ID is not defined
-    if (!userId) {res.status(400).send('Error: No User ID given'); 
+    if (!userId) {
+        res.status(400).send('Error: No User ID given');
         return null;
     }
-
 
     // Create connection to DB
     const db = new Connection();
     var conn = db.getConnection();
 
     //Checks to see if the user liked the post already
-    var query = `SELECT accountID, postID FROM postLiked WHERE postID = ${postId} AND accountID = ${userId}`; 
+    var query = `SELECT accountID, postID FROM postLiked WHERE postID = ${postId} AND accountID = ${userId}`;
 
     conn.query(query)
         .then((result) => {
-
             //If the user has already liked the post, remove the row from table
-            if(result.rows.length != 0){
+            if (result.rows.length != 0) {
                 const db2 = new Connection();
                 var conn2 = db2.getConnection();
                 var q1 = `DELETE FROM postLiked WHERE postID = ${postId} AND accountID = ${userId}`;
-                conn2.query(q1).then(() =>{
-                    res.status(200).send({message: "Post unliked, removed from DB", isLiked: false});
-                    updateLikeCount(postId);
-                }).catch((err) => {
-                    // Return 400 if post was not found
-                    res.status(402).send(err);
-                }).finally(() => {
-                    db2.disconnect();
-                });
-            }else{
+                conn2
+                    .query(q1)
+                    .then(() => {
+                        res.status(200).send({ message: 'Post unliked, removed from DB', isLiked: false });
+                        updateLikeCount(postId);
+                    })
+                    .catch((err) => {
+                        // Return 400 if post was not found
+                        res.status(402).send(err);
+                    })
+                    .finally(() => {
+                        db2.disconnect();
+                    });
+            } else {
                 //Else, add to the table
                 const db2 = new Connection();
                 var conn2 = db2.getConnection();
                 var add = `INSERT INTO postLiked VALUES (${userId}, ${postId})`;
-                conn2.query(add).then(()=>{
-                    updateLikeCount(postId);
-                    res.status(200).send({message: "User account liked the post. Liked added to the db", isLiked: true});
-                }).catch((err) => {
-                    // Return 400 if post was not found
-                    res.status(401).send(err);
-                }).finally(() => {
-                    db2.disconnect();
-                });
+                conn2
+                    .query(add)
+                    .then(() => {
+                        updateLikeCount(postId);
+                        res.status(200).send({
+                            message: 'User account liked the post. Liked added to the db',
+                            isLiked: true,
+                        });
+                    })
+                    .catch((err) => {
+                        // Return 400 if post was not found
+                        res.status(401).send(err);
+                    })
+                    .finally(() => {
+                        db2.disconnect();
+                    });
             }
         })
         .catch((err) => {
             // Return 400 if post was not found
             res.status(400).send(err);
         })
-        .finally(() =>{
+        .finally(() => {
             db.disconnect();
         });
 });
@@ -461,14 +460,12 @@ app.post('/check-post-like', (req, res) => {
     if (req.session && req.session.uid) {
         const db = new Connection();
         const conn = db.getConnection();
-        conn.query(
-            `SELECT * FROM postLiked WHERE accountID=${req.session.uid} AND postID=${req.body.pid}`,
-        )
+        conn.query(`SELECT * FROM postLiked WHERE accountID=${req.session.uid} AND postID=${req.body.pid}`)
             .then((result) => {
-                if(result.rows.length == 0) {
-                    res.status(200).send({ liked: "postedNotLiked" });
+                if (result.rows.length == 0) {
+                    res.status(200).send({ liked: 'postedNotLiked' });
                 } else {
-                    res.status(200).send({ liked: "postedLiked" });
+                    res.status(200).send({ liked: 'postedLiked' });
                 }
             })
             .catch((err) => {
@@ -480,18 +477,15 @@ app.post('/check-post-like', (req, res) => {
                 db.disconnect();
             });
     } else {
-        res.status(200).send({ liked: "postedNotLiked" });
+        res.status(200).send({ liked: 'postedNotLiked' });
     }
 });
 
 // Returns how many likes a post has
 app.post('/post-like-count', (req, res) => {
-
     const db = new Connection();
     const conn = db.getConnection();
-    conn.query(
-        `SELECT * FROM postLiked WHERE postID=${req.body.pid}`,
-    )
+    conn.query(`SELECT * FROM postLiked WHERE postID=${req.body.pid}`)
         .then((result) => {
             res.status(200).send({ numberOfLikes: result.rows.length });
         })
@@ -532,23 +526,19 @@ app.post('/post/:id/edit', (req, res) => {
 function updateLikeCount(pid: number) {
     const db = new Connection();
     var conn = db.getConnection();
-    conn.query(
-        `SELECT * FROM postLiked WHERE postID=${pid}`
-    )
+    conn.query(`SELECT * FROM postLiked WHERE postID=${pid}`)
         .then((result) => {
             //Update post table with the new number of likes
             var postNumberOfLikes = result.rows.length;
             const db2 = new Connection();
             var conn2 = db2.getConnection();
-            conn2.query(
-                `UPDATE post SET score=${postNumberOfLikes} WHERE pid=${pid}`
-            )
-                .then(() => {
-
-                })
+            conn2
+                .query(`UPDATE post SET score=${postNumberOfLikes} WHERE pid=${pid}`)
+                .then(() => {})
                 .catch((err) => {
                     console.error(err);
-                }).finally(() => {
+                })
+                .finally(() => {
                     db2.disconnect();
                 });
         })
