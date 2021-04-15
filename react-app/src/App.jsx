@@ -22,6 +22,10 @@ function App() {
       });
   }, []);
 
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
+
   return (
     <BrowserRouter>
       <div className="App">

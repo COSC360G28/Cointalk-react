@@ -13,14 +13,18 @@ export const NavBar = () => {
       <nav>
         <h1 href="/">COINTALK</h1>
         {user ? (
-          user.accountAvatarURL ? (
+          user.accountavatarurl ? (
             <img
               alt="avatar"
               className="avatar"
               onClick={() => {
                 window.location.replace("/logout");
               }}
-              src={user.accountAvatarURL}
+              src={
+                process.env.REACT_APP_API_URL +
+                "/image/" +
+                user.accountavatarurl
+              }
             />
           ) : (
             <DefaultAvatar

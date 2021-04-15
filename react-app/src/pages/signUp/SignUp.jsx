@@ -38,20 +38,24 @@ export const SignUp = () => {
 
   function handleSubmit(event) {
     event.preventDefault();
+
+    const formData = new FormData();
+    formData.append("email", email);
+    formData.append("password", password);
+    formData.append("username", username);
+    formData.append("profile-image", profilePicture);
+
     const requestOptions = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: {
-        email: email,
-        password: password,
-        username: username,
-      },
+      headers: { "Content-Type": "multipart/form-data" },
+      withCredentials: true,
     };
     if (password == secondPassword) {
       axios
-        .post(`${process.env.REACT_APP_API_URL}/signup`, requestOptions, {
-          withCredentials: true,
-        })
+        .post(
+          `${process.env.REACT_APP_API_URL}/signup`,
+          formData,
+          requestOptions
+        )
         .then((res) => {
           window.location.replace("/");
         })
