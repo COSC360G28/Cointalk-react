@@ -59,6 +59,7 @@ $pink: #ff206e;
   .post-edit-text-input {
     width: 100%;
     border: none;
+    border-bottom: 2px solid $pink;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     padding: 0;
   }
