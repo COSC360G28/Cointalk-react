@@ -17,6 +17,7 @@ CREATE TABLE account (
 	accountAvatarURL VARCHAR(100),
 	dateCreated TIMESTAMP,
 	admin BOOLEAN,
+	banned BOOLEAN default FALSE,
 	PRIMARY KEY (uid)
 );
 
@@ -74,10 +75,12 @@ INSERT INTO coin(name, abbreviation) VALUES ('Bitcoin', 'BTC');
 INSERT INTO coin(name, abbreviation) VALUES ('Ripple', 'XRP');
 INSERT INTO coin(name, abbreviation) VALUES ('Neo', 'NEO');
 
-INSERT INTO account(username, password, email, dateCreated, admin) VALUES ('admin', 'admin', 'test@test.com', '2021-03-11 03:21:10', TRUE);
-INSERT INTO account(username, password, email, dateCreated, admin) VALUES ('arnold', 'pass', 'arnold@test.com', '2021-03-12 13:13:10', FALSE);
-INSERT INTO account(username, password, email, dateCreated, admin) VALUES ('james', '123', 'james@test.com', '2021-03-20 10:36:01', FALSE);
-INSERT INTO account(username, password, email, dateCreated, admin) VALUES ('bobby', 'iforgot', 'bobby@test.com', '2021-03-21 19:46:47', FALSE);
+INSERT INTO account(username, password, email, dateCreated, admin, banned) VALUES ('admin', 'admin', 'test@test.com', '2021-03-11 03:21:10', TRUE, FALSE);
+INSERT INTO account(username, password, email, dateCreated, admin, banned) VALUES ('arnold', 'pass', 'arnold@test.com', '2021-03-12 13:13:10', FALSE, FALSE);
+INSERT INTO account(username, password, email, dateCreated, admin, banned) VALUES ('james', '123', 'james@test.com', '2021-03-20 10:36:01', FALSE, FALSE);
+INSERT INTO account(username, password, email, dateCreated, admin, banned) VALUES ('bobby', 'iforgot', 'bobby@test.com', '2021-03-21 19:46:47', FALSE, FALSE);
+INSERT INTO account(username, password, email, dateCreated, admin, banned) VALUES ('mark', 'mark', 'mark@mark.com', '2021-03-11 03:21:10', TRUE, TRUE);
+
 
 INSERT INTO post(title, text, userID, date, type, score, coin) VALUES('Testing of posts BTC', 'This is a test of the posting system, hopefully it works well in Bitcoin', 1, '2021-03-15 01:58:59', 'text', 3, 'BTC');
 INSERT INTO post(title, text, userID, date, type, score, coin) VALUES('Testing of posts ETH', 'This is a test of the posting system, hopefully it works well in Etherium', 1, '2021-03-15 05:32:12', 'text', 3, 'ETH');
