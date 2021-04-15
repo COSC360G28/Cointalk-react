@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { CategorySelector } from "../../components/categorySelector/CategorySelector";
 import { ScrollHeader } from "../../components/scrollHeader/ScrollHeader";
 import { NavBar } from "../../components/navBar/NavBar";
 import { PostPreview } from "../../components/postPreview/PostPreview";
 import { MainContent, Content } from "../../components/containers/Containers";
-import {CreatePost} from "../../components/createPost/CreatePost"
+import { CreatePost } from "../../components/createPost/CreatePost";
+import { UserContext } from "../../Contexts";
 
 export const Main = () => {
   const [category, setCategory] = useState("ETH");
@@ -13,6 +14,7 @@ export const Main = () => {
   const [page, setPage] = useState(0);
   const [posts, setPosts] = useState([]);
   const [searchText, setSearchText] = useState("");
+  const [user, setUser] = useContext(UserContext);
 
   useEffect(() => {
     axios
@@ -33,8 +35,11 @@ export const Main = () => {
       <CategorySelector selected={category} setSelected={setCategory} />
       <ScrollHeader setSort={setSort} setSearching={setSearchText} />
       <MainContent>
-      <CreatePost />
-
+        {user ? (
+          <Content>
+            <CreatePost />
+          </Content>
+        ) : null}
         {posts.map((post) => (
           <Content key={post.pid}>
             <PostPreview {...post} />
