@@ -524,8 +524,57 @@ app.post('/post/:id/remove', (req, res) => {
 
 // Edit Post
 app.post('/post/:id/edit', (req, res) => {
-    // post = req.params.id
-    res.send('todo');
+    if (req.session && req.session.uid) {
+        const post = req.params.id;
+        const db = new Connection();
+        const conn = db.getConnection();
+        conn.query(
+            `UPDATE post SET text='${req.body.newText}' WHERE pid=${post} AND userID=${req.session.uid}`,
+        )
+            .then((result) => {
+                res.status(200).send("Post Updated");
+
+            })
+            .catch((err) => {
+                res.status(400).send({
+                    message: 'Unable to query database.',
+                });
+            })
+            .finally(() => {
+                db.disconnect();
+            });
+    } else {
+        res.status(401).send("User must be logged in to edit posts");
+    }
+});
+
+// Returns { isPostOwner: true } if the current user owns the post
+app.post('/post/:id/isPostOwner', (req, res) => {
+    if (req.session && req.session.uid) {
+        const post = req.params.id;
+        const db = new Connection();
+        const conn = db.getConnection();
+        conn.query(
+            `SELECT * FROM post WHERE pid=${post} AND userID=${req.session.uid}`
+        )
+            .then((result) => {
+                if(result.rows.length > 0) {
+                    res.status(200).send({isPostOwner: true});
+                } else {
+                    res.status(200).send({isPostOwner: false});
+                }
+            })
+            .catch((err) => {
+                res.status(400).send({
+                    message: 'Unable to query database.',
+                });
+            })
+            .finally(() => {
+                db.disconnect();
+            });
+    } else {
+        res.status(200).send({isPostOwner: false});
+    }
 });
 
 //After the postLiked Table is updated we retrieve the total number of likes to update the post table

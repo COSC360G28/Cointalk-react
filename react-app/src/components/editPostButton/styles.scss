@@ -1,0 +1,30 @@
+$pink: #ff206e;
+
+.edit-post-button-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  .edit-post-button-pencil {
+    margin: 2px 10px;
+    width: 20px;
+    height: 20px;
+
+    &:hover {
+      cursor: pointer;
+      color: $pink;
+    }
+  }
+
+  .edit-post-button-check {
+    margin: 0px 10px;
+    color: $pink;
+    width: 25px;
+    height: 25px;
+
+    &:hover {
+      cursor: pointer;
+      color: black;
+    }
+  }
+}
