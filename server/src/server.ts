@@ -604,6 +604,66 @@ app.post('/post/:id/remove', (req, res) => {
     }
 });
 
+// Remove Comment
+app.post('/comment/:id/remove', (req, res) => {
+    if (req.session && req.session.uid) {
+        const commentId = req.params.id;
+        const db = new Connection();
+        const conn = db.getConnection();
+        conn.query(
+            `SELECT * FROM comment WHERE userID=${req.session.uid} AND cid=${commentId}`
+        )
+            .then((result) => {
+                const db2 = new Connection();
+                const conn2 = db2.getConnection();
+                conn2.query(
+                    `SELECT * FROM account WHERE uid=${req.session.uid}`
+                )
+                    .then((result2) => {
+                        if(result.rows.length > 0 || result2.rows[0].admin) {
+                            const db3 = new Connection();
+                            const conn3 = db3.getConnection();
+                            conn3.query(
+                                `DELETE FROM comment WHERE cid=${commentId}`
+                            )
+                                .then((result3) => {
+                                    res.status(200).send("Comment deleted.");
+                                })
+                                .catch((err) => {
+                                    res.status(400).send({
+                                        message: 'Unable to query database.',
+                                    });
+                                })
+                                .finally(() => {
+                                    db3.disconnect();
+                                });
+                        } else {
+                            res.status(401).send("Not authorized to delete this comment.");
+                        }
+
+                    })
+                    .catch((err) => {
+                        res.status(400).send({
+                            message: 'Unable to query database.',
+                        });
+                    })
+                    .finally(() => {
+                        db2.disconnect();
+                    });
+            })
+            .catch((err) => {
+                res.status(400).send({
+                    message: 'Unable to query database.',
+                });
+            })
+            .finally(() => {
+                db.disconnect();
+            });
+    } else {
+        res.status(401).send("User must be logged in to edit posts");
+    }
+});
+
 // Edit Post
 app.post('/post/:id/edit', (req, res) => {
     if (req.session && req.session.uid) {
@@ -627,6 +687,32 @@ app.post('/post/:id/edit', (req, res) => {
             });
     } else {
         res.status(401).send("User must be logged in to edit posts");
+    }
+});
+
+// Edit Comment
+app.post('/comment/:id/edit', (req, res) => {
+    if (req.session && req.session.uid) {
+        const commentId = req.params.id;
+        const db = new Connection();
+        const conn = db.getConnection();
+        conn.query(
+            `UPDATE comment SET content='${req.body.newText}' WHERE cid=${commentId} AND userID=${req.session.uid}`,
+        )
+            .then((result) => {
+                res.status(200).send("Comment Updated");
+
+            })
+            .catch((err) => {
+                res.status(400).send({
+                    message: 'Unable to query database.',
+                });
+            })
+            .finally(() => {
+                db.disconnect();
+            });
+    } else {
+        res.status(401).send("User must be logged in to edit comments");
     }
 });
 
@@ -656,6 +742,35 @@ app.post('/post/:id/isPostOwner', (req, res) => {
             });
     } else {
         res.status(200).send({isPostOwner: false});
+    }
+});
+
+// Returns { isCommentOwner: true } if the current user made the comment
+app.post('/comment/:id/isCommentOwner', (req, res) => {
+    if (req.session && req.session.uid) {
+        const commentId = req.params.id;
+        const db = new Connection();
+        const conn = db.getConnection();
+        conn.query(
+            `SELECT * FROM comment WHERE cid=${commentId} AND userID=${req.session.uid}`
+        )
+            .then((result) => {
+                if(result.rows.length > 0) {
+                    res.status(200).send({isCommentOwner: true});
+                } else {
+                    res.status(200).send({isCommentOwner: false});
+                }
+            })
+            .catch((err) => {
+                res.status(400).send({
+                    message: 'Unable to query database.',
+                });
+            })
+            .finally(() => {
+                db.disconnect();
+            });
+    } else {
+        res.status(200).send({isCommentOwner: false});
     }
 });
 

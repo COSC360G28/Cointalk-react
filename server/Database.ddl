@@ -53,7 +53,7 @@ CREATE TABLE comment (
 	PRIMARY KEY (cid),
 	FOREIGN KEY (userID) REFERENCES account(uid) ON UPDATE CASCADE ON DELETE NO ACTION,
 	FOREIGN KEY (mainPostID) REFERENCES post(pid) ON DELETE CASCADE,
-	FOREIGN KEY (parentID) REFERENCES comment(cid)
+	FOREIGN KEY (parentID) REFERENCES comment(cid) ON DELETE CASCADE
 );
 
 CREATE TABLE postLiked ( --any entries in here mean that the post was liked by the account
