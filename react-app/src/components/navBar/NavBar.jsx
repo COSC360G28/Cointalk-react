@@ -14,25 +14,43 @@ export const NavBar = () => {
         <h1 onClick={() => window.location.replace("/")}>COINTALK</h1>
         {user ? (
           user.accountavatarurl ? (
-            <img
-              alt="avatar"
-              className="avatar"
-              onClick={() => {
+            <>
+              <h3 
+                className="logout-text"
+                onClick={() => {
                 window.location.replace("/logout");
-              }}
-              src={
-                process.env.REACT_APP_API_URL +
-                "/image/" +
-                user.accountavatarurl
-              }
-            />
+                }}>
+                  Logout
+              </h3>
+              <img
+                alt="avatar"
+                className="avatar"
+                onClick={() => {
+                  window.location.replace("/user/" + user.username);
+                }}
+                src={
+                  process.env.REACT_APP_API_URL +
+                  "/image/" +
+                  user.accountavatarurl
+                }
+              />
+            </>
           ) : (
-            <DefaultAvatar
-              className="avatar"
-              onClick={() => {
+            <>
+              <h3 
+                className="logout-text"
+                onClick={() => {
                 window.location.replace("/logout");
-              }}
-            />
+                }}>
+                  Logout
+              </h3>
+              <DefaultAvatar
+                className="avatar"
+                onClick={() => {
+                  window.location.replace("/user/" + user.username);
+                }}
+              />
+            </>
           )
         ) : (
           <>
