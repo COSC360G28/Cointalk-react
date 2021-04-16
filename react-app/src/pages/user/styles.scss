@@ -1,0 +1,20 @@
+@import "../../App.scss";
+
+.user-toggle {
+  display: flex;
+  flex-direction: row;
+
+  h3 {
+    margin: 0 10px;
+    color: $grey;
+
+    &:hover {
+      color: $pink;
+      cursor: pointer;
+    }
+
+    &.selected {
+      color: black;
+    }
+  }
+}

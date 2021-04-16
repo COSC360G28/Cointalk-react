@@ -229,7 +229,9 @@ app.get('/user/:username/comments', (req, res) => {
         const db = new Connection();
         const conn = db.getConnection();
 
-        conn.query(`SELECT * FROM account, comment WHERE comment.userID=account.uid AND account.username='${username}'`)
+        conn.query(
+            `SELECT cid, content, mainpostid FROM account, comment WHERE comment.userID=account.uid AND account.username='${username}'`,
+        )
             .then((result) => {
                 res.status(200).send(result.rows);
             })
