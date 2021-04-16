@@ -36,8 +36,8 @@ Group Members:
 - [DONE] Register at the site by providing their name, e-mail and image
 - [DONE] Allow user login by providing user id and password
 - [DONE] Create and comment when logged into the site
-- [TODO] Users are required to be able to view/edit their profile
-- [TODO] User password recovery (via email)
+- [DONE] Users are required to be able to view/edit their profile
+- [DONE] User password recovery (via email)
 - [DONE] Search for user by name, email or post
 - [TODO] Enable/disable users
 - [DONE] Edit/remove posts and comments
