@@ -29,6 +29,8 @@ export const Login = () => {
       .catch((err) => {
         if (err.response.status == 401) {
           setError("Incorrect Email or Password.");
+        } else if(err.response.status == 403) {
+          setError("Account has been banned.");
         } else {
           console.log(err);
         }

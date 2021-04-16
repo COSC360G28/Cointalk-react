@@ -290,16 +290,21 @@ app.post('/login', (req, res) => {
     const db = new Connection();
     const conn = db.getConnection();
     conn.query(
-        `SELECT username, uid, email, admin, accountAvatarURL, banned FROM account WHERE (account.email = '${login}' OR account.username='${login}') AND account.password = '${password}' AND account.banned = FALSE ORDER BY uid DESC LIMIT 1`,
+        `SELECT username, uid, email, admin, accountAvatarURL, banned FROM account WHERE (account.email = '${login}' OR account.username='${login}') AND account.password = '${password}' ORDER BY uid DESC LIMIT 1`,
     )
         .then((result) => {
             if (result.rows.length > 0) {
-                //Example how to get query results
-                const user = result.rows[0];
-                req.session.uid = user.uid;
-                req.session.save(() => {
-                    res.status(200).send(user);
-                });
+                if(!result.rows[0].banned) {
+                    //If user is not banned
+                    const user = result.rows[0];
+                    req.session.uid = user.uid;
+                    req.session.save(() => {
+                        res.status(200).send(user);
+                    });
+                } else {
+                    //If user is banned
+                    res.status(403).send("Account has been banned.");
+                }
             } else {
                 res.status(401).send('Bad Credentials.');
             }
@@ -624,7 +629,7 @@ app.post('/forgot-password', (req, res) => {
 // Ban User
 app.post('/user/:id/ban', (req, res) => {
     const uid = req.session.uid;
-    const bannedUser = req.body.bannedUser;
+    const bannedUser = req.params.id;
 
     if (!req.session?.uid) {
         res.status(401).send({ error: 'Error: This user is not logged in' });
@@ -645,7 +650,40 @@ app.post('/user/:id/ban', (req, res) => {
                 message: 'User is not an admin',
             });
         } else {
-            conn1.query(`UPDATE account SET banned = TRUE WHERE uid = ${bannedUser}`).then(() => {
+            conn1.query(`UPDATE account SET banned=TRUE WHERE uid=${bannedUser}`).then(() => {
+                res.status(200).send({
+                    message: 'User successfully banned',
+                });
+            });
+        }
+    });
+});
+
+// Unban User
+app.post('/user/:id/unban', (req, res) => {
+    const uid = req.session.uid;
+    const bannedUser = req.params.id;
+
+    if (!req.session?.uid) {
+        res.status(401).send({ error: 'Error: This user is not logged in' });
+    }
+    //Check is user is an admin.
+    const db = new Connection();
+    const conn = db.getConnection();
+
+    //connection for second query
+    const db1 = new Connection();
+    const conn1 = db1.getConnection();
+
+    //Check if user is an admin
+    const checkAdmin = `SELECT admin FROM account WHERE uid =${uid}`;
+    conn.query(checkAdmin).then((result) => {
+        if (result.rows.length == 0) {
+            res.status(400).send({
+                message: 'User is not an admin',
+            });
+        } else {
+            conn1.query(`UPDATE account SET banned=FALSE WHERE uid=${bannedUser}`).then(() => {
                 res.status(200).send({
                     message: 'User successfully banned',
                 });

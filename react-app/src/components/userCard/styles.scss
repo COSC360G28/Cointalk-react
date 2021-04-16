@@ -30,6 +30,9 @@ $pink: #ff206e;
         font-weight: 600;
         margin: 5px 10px
       }
+      .user-username-banned-text {
+        color: red;
+      }
       .user-username-pencil {
         margin-top: auto;
         margin-bottom: auto;
@@ -47,6 +50,24 @@ $pink: #ff206e;
 
         &:hover {
           color: $pink;
+          cursor: pointer;
+        }
+      }
+      .user-username-ban {
+        margin-top: auto;
+        margin-bottom: auto;
+        color: red;
+
+        &:hover {
+          cursor: pointer;
+        }
+      }
+      .user-username-unban {
+        margin-top: auto;
+        margin-bottom: auto;
+        color: green;
+
+        &:hover {
           cursor: pointer;
         }
       }
