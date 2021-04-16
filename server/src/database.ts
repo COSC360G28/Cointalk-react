@@ -11,7 +11,7 @@ export class Connection {
         this.client = new Client({
             user: process.env.DB_USER,
             database: process.env.DB_NAME,
-            host: process.env.DB_HOST,
+            host: process.env.NODE_ENV === 'test' ? 'localhost' : process.env.DB_HOST,
             password: process.env.DB_PASS,
             port: parseInt(<string>process.env.DB_PORT, 10),
             query_timeout: 10000,
@@ -22,7 +22,7 @@ export class Connection {
     connect() {
         this.client.connect((err) => {
             if (err) {
-                console.error('connection error', err.stack);
+                console.error('connection error', err);
             }
         });
     }
@@ -50,10 +50,17 @@ export class Connection {
     }
 
     populate() {
-        fs.readFile('Database.ddl', 'utf-8', (err, data) => {
-            if (err) throw err;
-            this.client.query(data, (err) => {
+        return new Promise((resolve, reject) => {
+            fs.readFile('Database.ddl', 'utf-8', (err, data) => {
                 if (err) throw err;
+                this.client
+                    .query(data)
+                    .then((res) => {
+                        resolve(res);
+                    })
+                    .catch((err) => {
+                        reject(err);
+                    });
             });
         });
     }
