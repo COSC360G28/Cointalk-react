@@ -6,7 +6,7 @@
 - [DONE] Layout with contextual menus (i.e., when user has logged on to site, menus reflect change)
 - [DONE] 2 or 3-column layoutusing appropriate design principles (i.e., highlighting nav links when hovered over, etc.)
 - [DONE] Navigation links along the top
-- [TODO] Has a masthead and a footer
+- [DONE] Has a masthead and a footer
 - [DONE] Navigation links need to be available regardless of where a user is viewing the page
 - [DONE] Navigation breadcrumb strategy (i.e., user can determine where they are in threads)
 - [DONE] Page for user registration
@@ -23,8 +23,7 @@
 - [DONE] Browse discussions/posts without registering
 - [DONE] Search for discussions/posts by keyword without registering
 - [DONE] Register at the site by providing their name, e-mail and image
-- [IN PRORESS] Allow user login by providing user id and password
-  - [TODO] Change "Email" prompt to "Username"
+- [DONE] Allow user login by providing user id and password
 - [DONE] Create and comment when logged into the site
 - [TODO] Users are required to be able to view/edit their profile
 - [TODO] User password recovery (via email)
@@ -38,11 +37,12 @@
 - [DONE] Hot threads/hot poststracking-show items by ranking
 - [TODO] Alerts on page changes (Do we really want to do this?????)
 - [TODO] Accessibility (WTF does this even mean??)
-- [TODO] Tracking comment history from a user’s perspective
+- [DONE] Tracking comment history from a user’s perspective
 - [DONE] Activity by date
 - [TODO] Resolve user problems (such as forgotten passwords)
 - [TODO] Admin view reports on usage (with filtering)
-- [TODO] Your choice (this is your opportunity to add additional flourishesto your site but will need to be documented in the final report)
+- [DONE] Your choice (this is your opportunity to add additional flourishesto your site but will need to be documented in the final report)
+    - [DONE] Categories
 
 ## Other
 
