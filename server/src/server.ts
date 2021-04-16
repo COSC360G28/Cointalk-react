@@ -164,30 +164,31 @@ app.get('/post/:id', (req, res) => {
 });
 
 // Gets the user based on UID
-app.get('/user/:id', (req, res) => {
-    const userID = req.params.id;
+app.get('/user/:username', (req, res) => {
+    const username = req.params.username;
     // userID = req.params.id
 
     // Return 400 if ID is not defined
-    if (!userID) {
+    if (!username) {
         res.status(400).send('Error: No User ID given');
-        return null;
-    }
-    // Create connection to DB
-    const db = new Connection();
-    const conn = db.getConnection();
+    } else {
+        // Create connection to DB
+        const db = new Connection();
+        const conn = db.getConnection();
 
-    conn.query(`SELECT username, password FROM account WHERE uid = ${userID}`)
-        .then((result) => {
-            db.disconnect();
-            // Return result with status 200
-            res.status(200).send(result.rows[0]);
-        })
-        .catch((err) => {
-            db.disconnect();
-            // Return 400 if post was not found
-            res.status(400).send(err);
-        });
+        conn.query(`SELECT * FROM account WHERE username='${username}'`)
+            .then((result) => {
+                // Return result with status 200
+                res.status(200).send(result.rows[0]);
+            })
+            .catch((err) => {
+                // Return 400 if post was not found
+                res.status(400).send(err);
+            })
+            .finally(() => {
+                db.disconnect();
+            });
+    }
 });
 
 // Get Logged in User Account
@@ -510,13 +511,10 @@ app.post('/reset-password', (req, res) => {
     res.send('todo');
 });
 
-
-
 // Ban User
 app.post('/user/:id/ban', (req, res) => {
     const uid = req.session.uid;
     const bannedUser = req.body.bannedUser;
-
 
     if (!req.session?.uid) {
         res.status(401).send({ error: 'Error: This user is not logged in' });
@@ -529,25 +527,21 @@ app.post('/user/:id/ban', (req, res) => {
     const db1 = new Connection();
     const conn1 = db1.getConnection();
 
-
     //Check if user is an admin
     const checkAdmin = `SELECT admin FROM account WHERE uid =${uid}`;
-    conn.query(checkAdmin).then((result) =>{
-        if(result.rows.length == 0){
+    conn.query(checkAdmin).then((result) => {
+        if (result.rows.length == 0) {
             res.status(400).send({
-                message: 'User is not an admin' });
-        }else{
-            conn1.query(`UPDATE account SET banned = TRUE WHERE uid = ${bannedUser}`).then(()=>{
+                message: 'User is not an admin',
+            });
+        } else {
+            conn1.query(`UPDATE account SET banned = TRUE WHERE uid = ${bannedUser}`).then(() => {
                 res.status(200).send({
-                    message: 'User successfully banned'});
-            })
+                    message: 'User successfully banned',
+                });
+            });
         }
-
-    })
-
-
-
-
+    });
 });
 
 // Remove Post
@@ -556,24 +550,20 @@ app.post('/post/:id/remove', (req, res) => {
         const post = req.params.id;
         const db = new Connection();
         const conn = db.getConnection();
-        conn.query(
-            `SELECT * FROM post WHERE userID=${req.session.uid} AND pid=${post}`
-        )
+        conn.query(`SELECT * FROM post WHERE userID=${req.session.uid} AND pid=${post}`)
             .then((result) => {
                 const db2 = new Connection();
                 const conn2 = db2.getConnection();
-                conn2.query(
-                    `SELECT * FROM account WHERE uid=${req.session.uid}`
-                )
+                conn2
+                    .query(`SELECT * FROM account WHERE uid=${req.session.uid}`)
                     .then((result2) => {
-                        if(result.rows.length > 0 || result2.rows[0].admin) {
+                        if (result.rows.length > 0 || result2.rows[0].admin) {
                             const db3 = new Connection();
                             const conn3 = db3.getConnection();
-                            conn3.query(
-                                `DELETE FROM post WHERE pid=${post}`
-                            )
+                            conn3
+                                .query(`DELETE FROM post WHERE pid=${post}`)
                                 .then((result3) => {
-                                    res.status(200).send("Post deleted.");
+                                    res.status(200).send('Post deleted.');
                                 })
                                 .catch((err) => {
                                     res.status(400).send({
@@ -584,9 +574,8 @@ app.post('/post/:id/remove', (req, res) => {
                                     db3.disconnect();
                                 });
                         } else {
-                            res.status(401).send("Not authorized to delete this post.");
+                            res.status(401).send('Not authorized to delete this post.');
                         }
-
                     })
                     .catch((err) => {
                         res.status(400).send({
@@ -606,7 +595,7 @@ app.post('/post/:id/remove', (req, res) => {
                 db.disconnect();
             });
     } else {
-        res.status(401).send("User must be logged in to edit posts");
+        res.status(401).send('User must be logged in to edit posts');
     }
 });
 
@@ -616,24 +605,20 @@ app.post('/comment/:id/remove', (req, res) => {
         const commentId = req.params.id;
         const db = new Connection();
         const conn = db.getConnection();
-        conn.query(
-            `SELECT * FROM comment WHERE userID=${req.session.uid} AND cid=${commentId}`
-        )
+        conn.query(`SELECT * FROM comment WHERE userID=${req.session.uid} AND cid=${commentId}`)
             .then((result) => {
                 const db2 = new Connection();
                 const conn2 = db2.getConnection();
-                conn2.query(
-                    `SELECT * FROM account WHERE uid=${req.session.uid}`
-                )
+                conn2
+                    .query(`SELECT * FROM account WHERE uid=${req.session.uid}`)
                     .then((result2) => {
-                        if(result.rows.length > 0 || result2.rows[0].admin) {
+                        if (result.rows.length > 0 || result2.rows[0].admin) {
                             const db3 = new Connection();
                             const conn3 = db3.getConnection();
-                            conn3.query(
-                                `DELETE FROM comment WHERE cid=${commentId}`
-                            )
+                            conn3
+                                .query(`DELETE FROM comment WHERE cid=${commentId}`)
                                 .then((result3) => {
-                                    res.status(200).send("Comment deleted.");
+                                    res.status(200).send('Comment deleted.');
                                 })
                                 .catch((err) => {
                                     res.status(400).send({
@@ -644,9 +629,8 @@ app.post('/comment/:id/remove', (req, res) => {
                                     db3.disconnect();
                                 });
                         } else {
-                            res.status(401).send("Not authorized to delete this comment.");
+                            res.status(401).send('Not authorized to delete this comment.');
                         }
-
                     })
                     .catch((err) => {
                         res.status(400).send({
@@ -666,7 +650,7 @@ app.post('/comment/:id/remove', (req, res) => {
                 db.disconnect();
             });
     } else {
-        res.status(401).send("User must be logged in to edit posts");
+        res.status(401).send('User must be logged in to edit posts');
     }
 });
 
@@ -703,8 +687,7 @@ app.post('/comment/:id/edit', (req, res) => {
             `UPDATE comment SET content='${req.body.newText}' WHERE cid=${commentId} AND userID=${req.session.uid}`,
         )
             .then((result) => {
-                res.status(200).send("Comment Updated");
-
+                res.status(200).send('Comment Updated');
             })
             .catch((err) => {
                 res.status(400).send({
@@ -715,7 +698,7 @@ app.post('/comment/:id/edit', (req, res) => {
                 db.disconnect();
             });
     } else {
-        res.status(401).send("User must be logged in to edit comments");
+        res.status(401).send('User must be logged in to edit comments');
     }
 });
 
@@ -752,14 +735,12 @@ app.post('/comment/:id/isCommentOwner', (req, res) => {
         const commentId = req.params.id;
         const db = new Connection();
         const conn = db.getConnection();
-        conn.query(
-            `SELECT * FROM comment WHERE cid=${commentId} AND userID=${req.session.uid}`
-        )
+        conn.query(`SELECT * FROM comment WHERE cid=${commentId} AND userID=${req.session.uid}`)
             .then((result) => {
-                if(result.rows.length > 0) {
-                    res.status(200).send({isCommentOwner: true});
+                if (result.rows.length > 0) {
+                    res.status(200).send({ isCommentOwner: true });
                 } else {
-                    res.status(200).send({isCommentOwner: false});
+                    res.status(200).send({ isCommentOwner: false });
                 }
             })
             .catch((err) => {
@@ -771,7 +752,7 @@ app.post('/comment/:id/isCommentOwner', (req, res) => {
                 db.disconnect();
             });
     } else {
-        res.status(200).send({isCommentOwner: false});
+        res.status(200).send({ isCommentOwner: false });
     }
 });
 
@@ -780,14 +761,12 @@ app.post('/isAdmin', (req, res) => {
     if (req.session && req.session.uid) {
         const db = new Connection();
         const conn = db.getConnection();
-        conn.query(
-            `SELECT * FROM account WHERE uid=${req.session.uid}`
-        )
+        conn.query(`SELECT * FROM account WHERE uid=${req.session.uid}`)
             .then((result) => {
-                if(result.rows[0].admin) {
-                    res.status(200).send({isAdmin: true});
+                if (result.rows[0].admin) {
+                    res.status(200).send({ isAdmin: true });
                 } else {
-                    res.status(200).send({isAdmin: false});
+                    res.status(200).send({ isAdmin: false });
                 }
             })
             .catch((err) => {
@@ -799,7 +778,7 @@ app.post('/isAdmin', (req, res) => {
                 db.disconnect();
             });
     } else {
-        res.status(200).send({isAdmin: false});
+        res.status(200).send({ isAdmin: false });
     }
 });
 
@@ -813,7 +792,8 @@ function updateLikeCount(pid: number) {
             var postNumberOfLikes = result.rows.length;
             const db2 = new Connection();
             var conn2 = db2.getConnection();
-            conn2.query(`UPDATE post SET score=${postNumberOfLikes} WHERE pid=${pid}`)
+            conn2
+                .query(`UPDATE post SET score=${postNumberOfLikes} WHERE pid=${pid}`)
                 .then(() => {})
                 .catch((err) => {
                     console.error(err);

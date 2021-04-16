@@ -39,7 +39,7 @@ function App() {
             <Route path="/post/:id" exact>
               <Post />
             </Route>
-            <Route path="/user" exact>
+            <Route path="/user/:id" exact>
               <User />
             </Route>
             <Route path="/logout" exact>
