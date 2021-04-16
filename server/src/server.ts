@@ -67,6 +67,21 @@ app.get('/test-database', async (_, res) => {
     }
 });
 
+app.get('/load-data', (req, res) => {
+    // Set Default db data
+    const db = new Connection();
+    db.populate()
+        .then(() => {
+            res.status(200).send('Success');
+        })
+        .catch(() => {
+            res.status(500).send('Error: Could not load data into Database');
+        })
+        .finally(() => {
+            db.disconnect();
+        });
+});
+
 // *** GET ENDPOINTS ***
 
 // Get image
