@@ -16,6 +16,7 @@ export const UserCard = ({
   const [user, setUser] = useContext(UserContext);
   const [editUsername, setEditUsername] = useState(false);
   const [editableUsername, setEditableUsername] = useState(username);
+  const [usernameError, setUsernameError] = useState("");
 
   function toggleEditUsername() {
     if(!editUsername) {
@@ -31,9 +32,14 @@ export const UserCard = ({
         )
         .then((res) => {
           setEditUsername(false);
+          setUsernameError("");
         })
         .catch((err) => {
-          console.error(err);
+          if(err.response.status == 409) {
+            setUsernameError(err.response.data.message);
+          } else {
+            console.error(err);
+          }
         });
     }
   }
@@ -54,23 +60,24 @@ export const UserCard = ({
         <UserIcon className="user-image" />
       )}
       <div className="user-text-info">
-        <div className="user-username-container">
           {editUsername ?
             <>
-              <input
-                className="user-username-input"
-                type="text" value={editableUsername}
-                onChange={(e) => {setEditableUsername(e.target.value)}}
-              />
-              <Check onClick={toggleEditUsername} className="user-username-check" />
+              <div className="user-username-container">
+                <input
+                  className="user-username-input"
+                  type="text" value={editableUsername}
+                  onChange={(e) => {setEditableUsername(e.target.value)}}
+                />
+                <Check onClick={toggleEditUsername} className="user-username-check" />
+              </div>
+              {usernameError && <p className="user-username-error" >{usernameError}</p>}
             </>
             :
-            <>
+            <div className="user-username-container">
               <h2>{editableUsername}</h2>
               {(user?.username === username) && <Pencil onClick={toggleEditUsername} className="user-username-pencil" />}
-            </>
+            </div>
           }
-        </div>
         <h4>Joined on {new Date(datecreated).toDateString()}</h4>
         {(user?.admin || user?.username === username) && <h4>{email}</h4>}
       </div>
