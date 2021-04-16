@@ -7,6 +7,7 @@ import { PostPreview } from "../../components/postPreview/PostPreview";
 import { MainContent, Content } from "../../components/containers/Containers";
 import { CreatePost } from "../../components/createPost/CreatePost";
 import { UserContext } from "../../Contexts";
+import { PageFooter } from "../../components/pageFooter/PageFooter"
 
 export const Main = () => {
   const [category, setCategory] = useState("ETH");
@@ -46,6 +47,7 @@ export const Main = () => {
           </Content>
         ))}
       </MainContent>
+      <PageFooter page={page} setPage={setPage} numPosts={posts.length} />
     </>
   );
 };
