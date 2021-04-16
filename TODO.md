@@ -5,7 +5,8 @@ Group Members:
 - Owen Murovec
 - Luke Sparg
 
-
+## High level description
+Cointalk is a website that allows crypto enthusiast users to discuss all things crypto related! This web application currently supports four popular cryptocurrencies. With the ability to sign up and customize your profile, to liking posts that other's create, this website covers all bases of a modern forum. Users can limit their posts to their liking, create posts with images and/or text, and posting to it their desired coin category. 
 
 
 
