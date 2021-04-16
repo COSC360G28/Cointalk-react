@@ -25,7 +25,7 @@ Group Members:
 - [DONE] Form validation with JavaScript before submission
 - [DONE] Responsive design philosophy (minimum requirements for different non-mobile display sizes)
 - [DONE] AJAX (or similar) utilization for asynchronous updates
-- [TODO] Preliminary summary document for server-side, indicating implemented functionality
+- [DONE] Preliminary summary document for server-side, indicating implemented functionality
 - [DONE] Post storage/Discussion thread storage in database
 - [DONE] User account information stored in the database (including user image)
 - [DONE] Appropriate security for data
