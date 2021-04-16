@@ -3,10 +3,9 @@ import "./styles.scss";
 import { Button } from "../../components/button/Button";
 import { UserAccessForm } from "../../components/userAccessForm/UserAccessForm";
 import axios from "axios";
-import { UserContext } from "../../Contexts.js";
 
 export const Login = () => {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
@@ -16,7 +15,7 @@ export const Login = () => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: {
-        email: email,
+        username: username,
         password: password,
       },
     };
@@ -41,10 +40,10 @@ export const Login = () => {
       <form onSubmit={handleSubmit}>
         <input
           type="text"
-          name="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          name="username"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
         />
         <input
           type="password"

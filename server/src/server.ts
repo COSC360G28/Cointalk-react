@@ -268,13 +268,13 @@ app.get('/account', (req, res) => {
 
 // Login
 app.post('/login', (req, res) => {
-    var email = req.body.body.email;
+    var login = req.body.body.username;
     var password = req.body.body.password;
 
     const db = new Connection();
     const conn = db.getConnection();
     conn.query(
-        `SELECT username, uid, email, admin, accountAvatarURL, banned FROM account WHERE account.email = '${email}' AND account.password = '${password}' AND account.banned = FALSE ORDER BY uid DESC LIMIT 1`,
+        `SELECT username, uid, email, admin, accountAvatarURL, banned FROM account WHERE (account.email = '${login}' OR account.username='${login}') AND account.password = '${password}' AND account.banned = FALSE ORDER BY uid DESC LIMIT 1`,
     )
         .then((result) => {
             if (result.rows.length > 0) {
