@@ -23,6 +23,7 @@ export const User = () => {
           setUserData(res.data);
         })
         .catch((err) => {
+          console.log(err);
           window.alert(err.response.data.error);
         });
     }
