@@ -59,6 +59,6 @@ Cointalk is a website that allows crypto enthusiast users to discuss all things 
 ## Other
 
 - [TODO] Summary of features implemented
-- [TODO] Walkthrough document(minimal/additional: 6/4)
+- [DONE] Walkthrough document(minimal/additional: 6/4)
 - [TODO] Detailed description of your implementation(minimal/additional: 6/4)
 - [TODO] Deployment, client-and server-side unit testing
