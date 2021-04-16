@@ -1,6 +1,6 @@
 import "./App.scss";
 import { useEffect, useState } from "react";
-import { NewPost, Main, Login, Post, User, SignUp, Logout } from "./pages/";
+import { NewPost, Main, Login, Post, User, SignUp, Logout, ForgotPassword } from "./pages/";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { UserContext } from "./Contexts.js";
 import axios from "axios";
@@ -47,6 +47,9 @@ function App() {
             </Route>
             <Route path="/newPost" exact>
               <NewPost />
+            </Route>
+            <Route path="/forgot-password" exact>
+              <ForgotPassword />
             </Route>
           </Switch>
         </UserContext.Provider>

@@ -55,6 +55,7 @@ export const Login = () => {
         {error && <p className="errorLabel">{error}</p>}
         <Button text="Sign In" />
       </form>
+      <a href="/forgot-password" id="text-forgot-password">Forgot Password</a>
     </UserAccessForm>
   );
 };

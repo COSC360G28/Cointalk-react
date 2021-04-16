@@ -5,3 +5,4 @@ export { Post } from "./post/Post";
 export { SignUp } from "./signUp/SignUp";
 export { Logout } from "./logout/Logout";
 export { NewPost } from "./newPost/NewPost";
+export { ForgotPassword } from "./forgotPassword/ForgotPassword"
