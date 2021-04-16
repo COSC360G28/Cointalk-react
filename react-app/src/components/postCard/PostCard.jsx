@@ -13,10 +13,14 @@ export const PostCard = ({ post }) => {
   const [admin, setAdmin] = useState(false);
 
   function toggleEditing() {
-    if(editing) {
+    if (editing) {
       //Triggered when editing STOPS
       axios
-        .post(`${process.env.REACT_APP_API_URL}/post/${post.pid}/edit`, {newText: content}, { withCredentials: true })
+        .post(
+          `${process.env.REACT_APP_API_URL}/post/${post.pid}/edit`,
+          { newText: content },
+          { withCredentials: true }
+        )
         .then((res) => {})
         .catch((err) => {
           console.log(err);
@@ -28,21 +32,29 @@ export const PostCard = ({ post }) => {
   }
 
   useEffect(() => {
-      axios
-        .post(`${process.env.REACT_APP_API_URL}/post/${post.pid}/isPostOwner`, {}, { withCredentials: true })
-        .then((res) => {
-          setOwner(res.data.isPostOwner);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
     axios
-      .post(`${process.env.REACT_APP_API_URL}/isAdmin`, {}, { withCredentials: true })
+      .post(
+        `${process.env.REACT_APP_API_URL}/post/${post.pid}/isPostOwner`,
+        {},
+        { withCredentials: true }
+      )
       .then((res) => {
-          setAdmin(res.data.isAdmin);
+        setOwner(res.data.isPostOwner);
       })
       .catch((err) => {
-          console.log(err);
+        console.log(err);
+      });
+    axios
+      .post(
+        `${process.env.REACT_APP_API_URL}/isAdmin`,
+        {},
+        { withCredentials: true }
+      )
+      .then((res) => {
+        setAdmin(res.data.isAdmin);
+      })
+      .catch((err) => {
+        console.log(err);
       });
   }, []);
 
@@ -50,26 +62,28 @@ export const PostCard = ({ post }) => {
     <div id="post">
       <div className="post-title-container">
         <h2>{post.title}</h2>
-        {post.accountavatarurl ? (
-          <img
-            className="profile-image"
-            alt="Profile"
-            src={post.accountavatarurl}
-          />
-        ) : (
-          <UserIcon className="profile-image" />
-        )}
-        <h3>{post.username}</h3>
-        {(owner || admin) ?
+        <a href={`/user/${post.username}`}>
+          {post.accountavatarurl ? (
+            <img
+              className="profile-image"
+              alt="Profile"
+              src={`${process.env.REACT_APP_API_URL}/image/${post.accountavatarurl}`}
+            />
+          ) : (
+            <UserIcon className="profile-image" />
+          )}
+          <h3>{post.username}</h3>
+        </a>
+        {owner || admin ? (
           <DeletePostButton postId={post.pid} />
-          :
+        ) : (
           <div className="delete-post-button-container" />
-        }
-        {owner ?
+        )}
+        {owner ? (
           <EditPostButton editGetter={editing} editToggle={toggleEditing} />
-          :
+        ) : (
           <div className="edit-post-button-container" />
-        }
+        )}
         <Stars score={post.score} postId={post.pid} />
       </div>
       {post.image ? (
@@ -80,11 +94,15 @@ export const PostCard = ({ post }) => {
           />
         </div>
       ) : null}
-      {editing ?
-        <textarea className="post-edit-text-input" value={content} onChange={(e) => setContent(e.target.value)} />
-        :
+      {editing ? (
+        <textarea
+          className="post-edit-text-input"
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+        />
+      ) : (
         <p className="post-text-container">{content}</p>
-      }
+      )}
     </div>
   );
 };
