@@ -46,8 +46,8 @@ Group Members:
 
 - [TODO] Collapsible posts/threads without page reloading
 - [DONE] Hot threads/hot poststracking-show items by ranking
-- [TODO] Alerts on page changes (Do we really want to do this?????)
-- [TODO] Accessibility (WTF does this even mean??)
+- [TODO] Alerts on page changes
+- [TODO] Accessibility 
 - [DONE] Tracking comment history from a user’s perspective
 - [DONE] Activity by date
 - [TODO] Resolve user problems (such as forgotten passwords)
