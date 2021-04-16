@@ -11,7 +11,7 @@ export const NavBar = () => {
   return (
     <>
       <nav>
-        <h1 href="/">COINTALK</h1>
+        <h1 onClick={() => window.location.replace("/")}>COINTALK</h1>
         {user ? (
           user.accountavatarurl ? (
             <img

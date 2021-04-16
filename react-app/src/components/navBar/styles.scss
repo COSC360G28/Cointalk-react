@@ -17,6 +17,10 @@ nav {
     font-size: 48px;
     font-family: "Monoton";
     font-weight: 200;
+
+    &:hover {
+      cursor: pointer;
+    }
   }
 
   .avatar {
