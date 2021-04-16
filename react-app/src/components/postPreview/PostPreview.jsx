@@ -32,10 +32,10 @@ export const PostPreview = ({
             <h3 onClick={goToPost} className="post-preview-title">
               {title}
             </h3>
-            <div className="user-container">
+            <a href={`/user/${username}`} className="user-container">
               <UserIcon className="user-icon" />
               <p>{username}</p>
-            </div>
+            </a>
           </div>
           <Stars score={score} postId={pid} />
         </div>
