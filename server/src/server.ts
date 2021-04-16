@@ -163,7 +163,7 @@ app.get('/post/:id', (req, res) => {
         });
 });
 
-// Gets the user based on UID
+// Gets the user based on username
 app.get('/user/:username', (req, res) => {
     const username = req.params.username;
     // userID = req.params.id
@@ -176,6 +176,7 @@ app.get('/user/:username', (req, res) => {
         const db = new Connection();
         const conn = db.getConnection();
 
+        // Get User's data
         conn.query(`SELECT * FROM account WHERE username='${username}'`)
             .then((result) => {
                 // Return result with status 200
@@ -184,6 +185,56 @@ app.get('/user/:username', (req, res) => {
             .catch((err) => {
                 // Return 400 if post was not found
                 res.status(400).send(err);
+            })
+            .finally(() => {
+                db.disconnect();
+            });
+    }
+});
+
+// Gets the user's posts based on username
+app.get('/user/:username/posts', (req, res) => {
+    const username = req.params.username;
+
+    // Return 400 if ID is not defined
+    if (!username) {
+        res.status(400).send('Error: No User ID given');
+    } else {
+        // Create connection to DB
+        const db = new Connection();
+        const conn = db.getConnection();
+
+        conn.query(`SELECT * FROM account, post WHERE post.userID=account.uid AND account.username='${username}'`)
+            .then((result) => {
+                res.status(200).send(result.rows);
+            })
+            .catch((err) => {
+                res.status(400).send('Error: Could not find resource');
+            })
+            .finally(() => {
+                db.disconnect();
+            });
+    }
+});
+
+// Gets the user's comments based on username
+app.get('/user/:username/comments', (req, res) => {
+    const username = req.params.username;
+
+    // Return 400 if ID is not defined
+    if (!username) {
+        res.status(400).send('Error: No User ID given');
+    } else {
+        // Create connection to DB
+        const db = new Connection();
+        const conn = db.getConnection();
+
+        conn.query(`SELECT * FROM account, comment WHERE comment.userID=account.uid AND account.username='${username}'`)
+            .then((result) => {
+                res.status(200).send(result.rows);
+            })
+            .catch((err) => {
+                res.status(400).send('Error: Could not find resource');
             })
             .finally(() => {
                 db.disconnect();

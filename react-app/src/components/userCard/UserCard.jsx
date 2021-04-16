@@ -16,11 +16,12 @@ export const UserCard = ({
     <div className="user-card-container">
       {accountavatarurl ? (
         <img
+          className="user-image"
           alt=""
           src={`${process.env.REACT_APP_API_URL}/image/${accountavatarurl}`}
         />
       ) : (
-        <UserIcon />
+        <UserIcon className="user-image" />
       )}
       <div className="user-text-info">
         <h2>{username}</h2>

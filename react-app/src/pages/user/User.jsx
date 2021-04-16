@@ -10,14 +10,31 @@ import { UserCard } from "../../components/userCard/UserCard";
 export const User = () => {
   let { id } = useParams();
   const [userData, setUserData] = useState();
+  const [posts, setPosts] = useState();
+  const [comments, setComments] = useState();
 
   useEffect(() => {
     if (!userData) {
       axios
         .get(`${process.env.REACT_APP_API_URL}/user/${id}`)
         .then((res) => {
-          console.log(res.data);
           setUserData(res.data);
+        })
+        .catch((err) => {
+          window.alert(err.response.data.error);
+        });
+      axios
+        .get(`${process.env.REACT_APP_API_URL}/user/${id}/comments`)
+        .then((res) => {
+          setComments(res.data);
+        })
+        .catch((err) => {
+          window.alert(err.response.data.error);
+        });
+      axios
+        .get(`${process.env.REACT_APP_API_URL}/user/${id}/posts`)
+        .then((res) => {
+          setPosts(res.data);
         })
         .catch((err) => {
           window.alert(err.response.data.error);
@@ -32,11 +49,11 @@ export const User = () => {
         <Content>
           <UserCard {...userData} />
         </Content>
-        {/* {userPosts.map((post) => ( */}
-        {/*   <Content key={post.id}> */}
-        {/*     <PostPreview {...post} /> */}
-        {/*   </Content> */}
-        {/* ))} */}
+        {posts?.map((post) => (
+          <Content key={post.pid}>
+            <PostPreview {...post} />
+          </Content>
+        ))}
       </MainContent>
     </>
   );
