@@ -770,6 +770,54 @@ app.post('/comment/:id/edit', (req, res) => {
     }
 });
 
+//Edit Username
+app.post('/change-username', (req, res) => {
+    if (req.session && req.session.uid) {
+        const db = new Connection();
+        const conn = db.getConnection();
+        conn.query(
+            `SELECT * FROM account WHERE username='${req.body.newUsername}'`,
+        )
+            .then((result) => {
+                if(result.rows.length < 1) {
+                const db2 = new Connection();
+                const conn2 = db2.getConnection();
+                conn2.query(
+                    `UPDATE account SET username='${req.body.newUsername}' WHERE uid=${req.session.uid}`,
+                )
+                    .then((result) => {
+                        res.status(200).send('Username Updated');
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                        res.status(400).send({
+                            message: 'Unable to query database.',
+                        });
+                    })
+                    .finally(() => {
+                        db2.disconnect();
+                    });
+                } else {
+                    res.status(409).send({
+                        message: 'Username already taken.',
+                    });
+                }
+            })
+            .catch((err) => {
+                res.status(400).send({
+                    message: 'Unable to query database.',
+                });
+            })
+            .finally(() => {
+                db.disconnect();
+            });
+
+
+    } else {
+        res.status(401).send('User must be logged in to edit username');
+    }
+});
+
 // Returns { isPostOwner: true } if the current user owns the post
 app.post('/post/:id/isPostOwner', (req, res) => {
     if (req.session && req.session.uid) {

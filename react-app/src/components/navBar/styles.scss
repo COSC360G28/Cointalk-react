@@ -27,9 +27,18 @@ nav {
     width: 30px;
     height: 30px;
     margin: 20px;
-    margin-left: auto;
     fill: $grey;
     border-radius: 50%;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .logout-text {
+    margin: 20px 0;
+    margin-left: auto;
+    color: $grey;
 
     &:hover {
       cursor: pointer;
