@@ -1,3 +1,14 @@
+Group Members:
+
+Mark Behnke
+Talon Pratt
+Owen Murovec
+Luke Sparg
+
+
+
+
+
 ## Main
 
 - [DONE] Layout document (Planned layout of your page showing elements, sizes, placement –this is the plan for what your site will look like)
