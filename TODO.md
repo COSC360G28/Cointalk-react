@@ -1,9 +1,9 @@
 Group Members:
 
-Mark Behnke
-Talon Pratt
-Owen Murovec
-Luke Sparg
+- Mark Behnke
+- Talon Pratt
+- Owen Murovec
+- Luke Sparg
 
 
 
