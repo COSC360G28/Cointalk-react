@@ -5,6 +5,7 @@ import { upload } from './multer';
 import { formatComments } from './functions';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import nodemailer from 'nodemailer';
 
 dotenv.config();
 
@@ -316,7 +317,9 @@ app.post('/signup', upload.single('profile-image'), (req, res, next) => {
     const username = req.body.username;
     const email = req.body.email;
     const password = req.body.password;
-    const profileImg = req.file.filename || 'default-profile.png';
+    let profileImg = req.file?.filename;
+    console.log(profileImg);
+    if(!profileImg) {profileImg = 'default-profile.png'}
 
     if (!username) {
         res.status(400).send({ field: 'username', message: 'is required.' });
@@ -574,9 +577,48 @@ app.post('/post-like-count', (req, res) => {
         });
 });
 
-// Request Password Reset
-app.post('/reset-password', (req, res) => {
-    res.send('todo');
+// Request Recovery Email
+app.post('/forgot-password', (req, res) => {
+    const db = new Connection();
+    const conn = db.getConnection();
+    conn.query(`SELECT * FROM account WHERE email='${req.body.email}'`)
+        .then((result) => {
+            if(result.rows.length > 0) {
+                var transporter = nodemailer.createTransport({
+                    service: 'gmail',
+                    auth: {
+                      user: 'cointalk.recovery@gmail.com',
+                      pass: 'cointalkPassword'
+                    }
+                  });
+                  
+                  var mailOptions = {
+                    from: 'cointalk.recovery@gmail.com',
+                    to: req.body.email,
+                    subject: 'CoinTalk Password Recovery',
+                    text: "Your password is " + result.rows[0].password
+                  };
+                  
+                  transporter.sendMail(mailOptions, function(error, info){
+                    if (error) {
+                      console.log(error);
+                      res.status(400).send("Unable to send email");
+                    } else {
+                        res.status(200).send({});
+                    }
+                  });
+            } else {
+                res.status(200).send({});
+            }
+        })
+        .catch((err) => {
+            res.status(400).send({
+                message: 'Unable to query database.',
+            });
+        })
+        .finally(() => {
+            db.disconnect();
+        });
 });
 
 // Ban User
