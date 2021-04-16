@@ -2,7 +2,7 @@
 
 **Made by Owen Murovec, Luke Sparg, Mark Behnke, and Talon Pratt**
 
-![](CTHomePage.png)
+![](CT_Images/CTHomePage.png)
 
 _Home Page for Cointalk_
 
