@@ -13,48 +13,6 @@ Docker is the container for the project which holds all the libraries and other 
  
  Node/Express is used for the logic and JavaScript of the project. This is used for the complex functions where we need variables and code to create robust data transfer and code manipulability.
 
-
-## Express Routes
-Express routes are used heavily throughout the project. A basic route we used looks like:
-```// Get Comments
-app.get('/post/:id/comments', (req, res) => {
-    const postID = req.params.id;
-
-    // Return 400 if ID is not defined
-    if (!postID) res.status(400).send('Error: No post ID given');
-
-.
-.
-.
-.
-```
-This allows our project to continuely listen for HTTP requests and when it calls a request that matches one of the implemented routes, it is able to return or query the relative request. 
-
-
-## Axios for AJAX
-
-Axios was used to handle the AJAX portion of our web application. A basic Axio implementation is:
-``` 
-useEffect(() => {
-    axios
-      .post(
-        `${process.env.REACT_APP_API_URL}/post/${post.pid}/isPostOwner`,
-        {},
-        { withCredentials: true }
-      )
-      .then((res) => {
-        setOwner(res.data.isPostOwner);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    
-  ```
-  Axios was used for the Asynchronous updating of the page, such as posting a new comment. Axios allows us to send HTTP requests to one of our endpoints and trigger that endpoint without the user having to refresh the page. Axios will listen to the current page and if an event is triggered, it will send a request to the relative endpoint which will trigger a change in the web structure.
-  
-
-
-
 ## 1. Docker compose/images (I can do this later)
 
 ### Accessing parameters
@@ -89,6 +47,22 @@ useEffect(() => {
   });
   ```
 
+## 2. Express Routes
+Express routes are used heavily throughout the project. A basic route could be:
+```javascript
+app.get('/testing/:id', (req, res) => {
+    const postID = req.params.id;
+
+    // Return 400 if ID is not defined
+    if (postID == 1) { 
+        res.status(200).send('Yay number 1');
+    } else {
+        res.status(400).send('Awe not number 1');
+    }
+});
+```
+This allows our project to continuely listen for HTTP requests and when it calls a request that matches one of the implemented routes, it is able to return or query the relative request. 
+
 ## 3. Connecting to postgres from node
 
 To access the postgres database from node the 'pg' package was used. This package is designed for this specific type of connection.
@@ -120,6 +94,41 @@ app.get('/test-database', (_, res) => {
 
 ## 4. Using multer for storing images to the uploads folder
 
+## 5. Axios for AJAX
+
+Axios was used to handle the AJAX portion of our web application. A basic Axio implementation is:
+```javascript
+axios
+  .post(
+    `${process.env.REACT_APP_API_URL}/testing/${id}/`,
+    {},
+    { withCredentials: true }
+  )
+  .then((res) => {
+    console.log(Success);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+```
+  Axios was used for the Asynchronous updating of the page, such as posting a new comment. Axios allows us to send HTTP requests to one of our endpoints and trigger that endpoint without the user having to refresh the page.
+Combining this with reacts useEffect the application will listen to the current page and if an event is triggered, it will send a request to the relative endpoint which will trigger a change in the web structure. This can be seen below.
+```javascript
+useEffect(() => {
+  axios
+    .post(
+      `${process.env.REACT_APP_API_URL}/testing/${id}/`,
+      {},
+      { withCredentials: true }
+    )
+    .then((res) => {
+      console.log(Success);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}, [ifThisVariableChangesUseEffectIsTriggered]);
+```
 
 ## 6. React Router for frontend urls
 
