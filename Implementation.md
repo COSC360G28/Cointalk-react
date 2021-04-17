@@ -1,4 +1,4 @@
-## COSC 360 - Detailed Implementation of Project
+# COSC 360 - Detailed Implementation of Project
 
 
 ## Basic Overview & Programming Languages/Frameworks Used
