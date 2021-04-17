@@ -172,7 +172,6 @@ req.session.save(() => {
 ```
 After this the users ID could be accessed through the session
 ```javascript
-req.session.uid = theUsersID;
 let userID = req.session.uid;
 ```
 
