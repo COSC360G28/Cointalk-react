@@ -37,7 +37,7 @@ Cointalk is a website that allows crypto enthusiast users to discuss all things 
 - [✅] AJAX (or similar) utilization for asynchronous updates
   - Many parts of our site utilize axios for AJAX operations. Comment loading, Post loading, user loading, and a bunch of other things use AJAX for quick initial load times and updates without page reloads.
 - [✅] Preliminary summary document for server-side, indicating implemented functionality
-  - See [Document](preliminay_server_document.pdf)
+  - See [Document](preliminary_server_document.pdf)
 - [✅] Post storage/Discussion thread storage in database
   - We used a PostgreSQL server (Docker Container) and query to store all our data.
 - [✅] User account information stored in the database (including user image)
