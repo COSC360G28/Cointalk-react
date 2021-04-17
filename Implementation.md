@@ -6,14 +6,15 @@
 Cointalk utilizes an array of modern frameworks and programming languages. Our front end application is built with React. 
 This allows us to use components, which creates options for code reusability and easy implementation of common elements like headers, nav bars etc. 
 
-The individual components make use of basic HTML syntax such as <div>, <a>, <p> while the design of those components use SCSS. SCSS is utilized to use advanced styling choices that CSS may not provide.
-Docker is the container for the project which holds all the libraries and other depenedencies that are used to deploy the application. This allows us to keep the whole application local and deploy as one package.
+The individual components make use of basic HTML syntax such as <div>, <a>, <p> while the design of those components use SCSS. SCSS is a CSS preprocessor and allows for easier selectors and variables to keep colors and sizes consistent between pages.
+Docker is the container manager for the project which holds all the components that are used in application. This allows us to easily launch and manage the entire ecosystem with a single command on our local machine.
  
  PostgreSQL is used to allow us to make complex queries and to store all data into our database.
  
- Node/Express is used for the logic and JavaScript of the project. This is used for the complex functions where we need variables and code to create robust data transfer and code manipulability.
+ Node/Express is used for the back-end. This is used for the complex functions where we need variables and code to create robust data transfer and data manipulability.
 
 ## 1. Docker compose/images (I can do this later)
+The postgres, react front-end and express backend all need to communicate to have a running application. An easy way to orchestrate these components is with docker. In both the server and react folders you can see there is a Dockerfile. This file tells docker how to take the code in the folder and create a container (Similar to a virtual machine) to run the code in a virtual environment. To launch the entire application, there is a docker-compose.yml file in the root directory that takes both of these Dockerfiles along with a base postgres image and launches them in an isolated environment. There are also settings to copy main code changes to the container for hot-reloading and networks for tehcontainers to interact with eachother.
 
 ## 2. Express Routes
 Express routes are used heavily throughout the project. A basic route could be:
@@ -113,12 +114,12 @@ const storage = multer.diskStorage({
     },
 });
 ```
-Multer is the package that allows user to upload images to their profile, or to their post. From here, we can see the pictures will be stored in 'uploads' folder with their image being the relative path.
+Multer is the package that allows user to upload images to their profile, or to their post. It takes the file from the formdata, processes it, and attaches it to the `res.body` object. From here, we can see the pictures will be stored in 'uploads' folder with their image being the relative path.
 
 
 ## 5. Axios for AJAX
 
-Axios was used to handle the AJAX portion of our web application. A basic Axio implementation is:
+Axios was used to handle the AJAX portion of our web application. A basic Axios implementation is:
 ```javascript
 axios
   .post(
@@ -155,7 +156,7 @@ useEffect(() => {
 
 ## 6. React Router for frontend urls
 
-To navigate the frontend urls React Router was used. Routes were created in App.js to render a react component that represents a page. Here is the code that routes the url:
+To navigate the frontend urls React Router was used. React router checks the current url and returns the correct data based on that route. Routes were created in App.js to render a react component that represents a page. Here is the code that routes the url:
 ```javascript
     <BrowserRouter>
       <div className="App">
