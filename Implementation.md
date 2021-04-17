@@ -116,6 +116,33 @@ useEffect(() => {
 
 ## 3. Connecting to postgres from node
 
+To access the postgres database from node the 'pg' package was used. This package is designed for this specific type of connection.
+A connection object was defined in database.ts which will manage the database connection. It had useful functions such as:
+- connect()
+- disconnect()
+- getConnection()
+- resetConnection()
+- populate()
+These can then be used in the backend endpoints. Using it in an endpoint would look something like this.
+```javascript
+import { Connection } from './database';
+
+app.get('/test-database', (_, res) => {
+    var database = new Connection();
+    var connection = database.getConnection();
+    connection.query('SELECT * FROM account')
+        .then((result) => {
+            res.status(200).send(result.rows);
+        })
+        .catch((err) => {
+            res.status(500).send(err);
+        })
+        .finally(() => {
+            db.disconnect();
+        });
+});
+```
+
 ## 4. Using multer for storing images to the uploads folder
 
 
@@ -126,7 +153,7 @@ useEffect(() => {
 ## 8. Recovery Email
 
 The 'nodemailer' package was used to to send recovery emails. This allows package allows for creation of a Transport object with an emailing service provider (eg. gmail), a username, and a password.
-```
+```javascript
 var transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -136,7 +163,7 @@ var transporter = nodemailer.createTransport({
 });
 ```
 This Transport object will then be able to login to that email account. Using the Transport object emails can be sent to the users emails in order to recover their account.
-```
+```javascript
 var mailOptions = {
   from: 'test@gmail.com',
   to: 'targetEmail@something.com',
@@ -150,6 +177,7 @@ transporter.sendMail(mailOptions, function(error, info){
   } else {
     console.log("Success!");
   }
+});
 ```
 
 ## 9. SQL setup
