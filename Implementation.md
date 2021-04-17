@@ -13,7 +13,7 @@ Docker is the container manager for the project which holds all the components t
  
  Node/Express is used for the back-end. This is used for the complex functions where we need variables and code to create robust data transfer and data manipulability.
 
-## 1. Docker compose/images (I can do this later)
+## 1. Docker compose/images
 The postgres, react front-end and express backend all need to communicate to have a running application. An easy way to orchestrate these components is with docker. In both the server and react folders you can see there is a Dockerfile. This file tells docker how to take the code in the folder and create a container (Similar to a virtual machine) to run the code in a virtual environment. To launch the entire application, there is a docker-compose.yml file in the root directory that takes both of these Dockerfiles along with a base postgres image and launches them in an isolated environment. There are also settings to copy main code changes to the container for hot-reloading and networks for tehcontainers to interact with eachother.
 
 ## 2. Express Routes
