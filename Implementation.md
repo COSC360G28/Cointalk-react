@@ -72,6 +72,7 @@ A connection object was defined in database.ts which will manage the database co
 - getConnection()
 - resetConnection()
 - populate()
+<br>
 These can then be used in the backend endpoints. Using it in an endpoint would look something like this.
 ```javascript
 import { Connection } from './database';
