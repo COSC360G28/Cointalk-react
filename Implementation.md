@@ -56,7 +56,32 @@ SCSS is utilized to use advanced styling choices that CSS may not provide.
 
 ## 8. Recovery Email
 
-The 'nodemailer' package was used to to send recovery emails. This allows package allows for creation of a Transport object with an emailing service provider (eg. gmail), a username, and a password. This Transport object will then be able to login to that email account. Using the Transport object emails can be sent to the users emails in order to recover their account.
+The 'nodemailer' package was used to to send recovery emails. This allows package allows for creation of a Transport object with an emailing service provider (eg. gmail), a username, and a password.
+```
+var transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'test@gmail.com',
+    pass: 'testPass'
+  }
+});
+```
+This Transport object will then be able to login to that email account. Using the Transport object emails can be sent to the users emails in order to recover their account.
+```
+var mailOptions = {
+  from: 'test@gmail.com',
+  to: 'targetEmail@something.com',
+  subject: 'CoinTalk Password Recovery',
+  text: 'Email content goes here'
+};
+
+transporter.sendMail(mailOptions, function(error, info){
+  if (error) {
+    console.log(error);
+  } else {
+    console.log("Success!");
+  }
+```
 
 ## 9. SQL setup
 
