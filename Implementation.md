@@ -258,3 +258,7 @@ The last 2 tables are the postLiked and CommentLiked tables. These just hold the
 
 ## 10. TypeScipt
 
+Typescript was used on the backend of the application because of the benefits that typing allows. JavaScript is a loosely typed language and TypeScript extends this to help reduce errors caused by developers. It was especially useful in this project because we were dealing with multiple packages and TypeScript helped to ensure we knew exactly what we were giving a package as well as what we were receiving from them. Here is an example of declaring a variable that will store a Client object.
+```javascript
+private client: Client;
+```
