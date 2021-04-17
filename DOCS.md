@@ -91,6 +91,6 @@ Cointalk is a website that allows crypto enthusiast users to discuss all things 
 - [✅] Walkthrough document(minimal/additional: 6/4)
   - See [Walkthrough](walkthrough.pdf)
 - [✅] Detailed description of your implementation(minimal/additional: 6/4)
-  - See [Implementation Description](implementation.md)
+  - See [Implementation Description](Implementation.md)
 - [✅] Deployment, client-and server-side unit testing
   - The project can be locally deployed and tested by following the steps in the [readme](README.md)
