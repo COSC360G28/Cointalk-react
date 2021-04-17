@@ -23,23 +23,10 @@ app.get('/post/:id/comments', (req, res) => {
     // Return 400 if ID is not defined
     if (!postID) res.status(400).send('Error: No post ID given');
 
-    // Create connection to DB
-    const db = new Connection();
-    const conn = db.getConnection();
-
-    conn.query(
-        `SELECT username, uid, content, parentID, cid FROM comment, account WHERE account.uid = comment.userID AND comment.mainPostID = ${postID}`,
-    )
-        .then((result) => {
-            db.disconnect();
-            let comments = formatComments(result.rows);
-            res.status(200).send(comments);
-        })
-        .catch((err) => {
-            db.disconnect();
-            res.status(400).send(err);
-        });
-});
+.
+.
+.
+.
 ```
 This allows our project to continuely listen for HTTP requests and when it calls a request that matches one of the implemented routes, it is able to return or query the relative request. 
 
@@ -61,19 +48,7 @@ useEffect(() => {
       .catch((err) => {
         console.log(err);
       });
-    axios
-      .post(
-        `${process.env.REACT_APP_API_URL}/isAdmin`,
-        {},
-        { withCredentials: true }
-      )
-      .then((res) => {
-        setAdmin(res.data.isAdmin);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+    
   ```
   Axios was used for the Asynchronous updating of the page, such as posting a new comment. Axios allows us to send HTTP requests to one of our endpoints and trigger that endpoint without the user having to refresh the page. Axios will listen to the current page and if an event is triggered, it will send a request to the relative endpoint which will trigger a change in the web structure.
   
