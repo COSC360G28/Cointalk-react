@@ -111,8 +111,9 @@ axios
     console.log(err);
   });
 ```
-  Axios was used for the Asynchronous updating of the page, such as posting a new comment. Axios allows us to send HTTP requests to one of our endpoints and trigger that endpoint without the user having to refresh the page.
-Combining this with reacts useEffect the application will listen to the current page and if an event is triggered, it will send a request to the relative endpoint which will trigger a change in the web structure. This can be seen below.
+  Axios was used for the Asynchronous updating of the page, such as posting a new comment. Axios allows us to send HTTP requests to one of our endpoints and trigger that endpoint without the user having to refresh the page. The { withCredentials: true } allows for credentials stored in cookies to be passed through the http request.
+<br>
+Combining this with react's useEffect the application will listen to the current page and if an event is triggered, it will send a request to the relative endpoint which will trigger a change in the web structure. This can be seen below.
 ```javascript
 useEffect(() => {
   axios
@@ -133,6 +134,28 @@ useEffect(() => {
 ## 6. React Router for frontend urls
 
 ## 7. Sessions in express
+
+User sessions are managed using the 'express-session' package. This package stores a cookie in the user's browser to keep track of a user's session. This package was set up as follows:
+```javascript
+var session = require('express-session');
+declare module 'express-session' {
+    export interface SessionData {
+        uid: number;
+    }
+}
+```
+A session could then be created in this way:
+```javascript
+req.session.uid = theUsersID;
+req.session.save(() => {
+    res.status(200).send(user);
+});
+```
+After this the users ID could be accessed through the session
+```javascript
+req.session.uid = theUsersID;
+let userID = req.session.uid;
+```
 
 ## 8. Recovery Email
 
