@@ -15,6 +15,22 @@ Docker is the container for the project which holds all the libraries and other 
 
 ## 1. Docker compose/images (I can do this later)
 
+## 2. Express Routes
+Express routes are used heavily throughout the project. A basic route could be:
+```javascript
+app.get('/testing/:id', (req, res) => {
+    const postID = req.params.id;
+
+    // Return 400 if ID is not defined
+    if (postID == 1) { 
+        res.status(200).send('Yay number 1');
+    } else {
+        res.status(400).send('Awe not number 1');
+    }
+});
+```
+This allows our project to continuely listen for HTTP requests and when it calls a request that matches one of the implemented routes, it is able to return or query the relative request. 
+
 ### Accessing parameters
 
 - URL params
@@ -47,21 +63,6 @@ Docker is the container for the project which holds all the libraries and other 
   });
   ```
 
-## 2. Express Routes
-Express routes are used heavily throughout the project. A basic route could be:
-```javascript
-app.get('/testing/:id', (req, res) => {
-    const postID = req.params.id;
-
-    // Return 400 if ID is not defined
-    if (postID == 1) { 
-        res.status(200).send('Yay number 1');
-    } else {
-        res.status(400).send('Awe not number 1');
-    }
-});
-```
-This allows our project to continuely listen for HTTP requests and when it calls a request that matches one of the implemented routes, it is able to return or query the relative request. 
 
 ## 3. Connecting to postgres from node
 
