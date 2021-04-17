@@ -1,3 +1,7 @@
+# Details of Project
+
+To view the details of the implementation navigate to Implementation.md
+
 # Getting Started
 
 ## Requirements
