@@ -74,7 +74,7 @@ A connection object was defined in database.ts which will manage the database co
 - resetConnection()
 - populate()
 <br>
-These can then be used in the backend endpoints. Using it in an endpoint would look something like this.
+These can then be used in the backend endpoints. Using it in an endpoint would look something like this:
 ```javascript
 import { Connection } from './database';
 
@@ -98,7 +98,7 @@ app.get('/test-database', (_, res) => {
 
 The Node.js Multer library was used for image uploading. The implementation of multer can be found in multer.ts, though a snippet looks like:
 
-```
+```javascript
 import multer from 'multer';
 import path from 'path';
 
@@ -110,7 +110,6 @@ const storage = multer.diskStorage({
         cb(null, `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`);
     },
 });
-
 ```
 Multer is the package that allows user to upload images to their profile, or to their post. From here, we can see the pictures will be stored in 'uploads' folder with their image being the relative path.
 
