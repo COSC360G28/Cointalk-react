@@ -153,6 +153,42 @@ useEffect(() => {
 
 ## 6. React Router for frontend urls
 
+To navigate the frontend urls React Router was used. Routes were created in App.js to render a react component that represents a page. Here is the code that routes the url:
+```javascript
+    <BrowserRouter>
+      <div className="App">
+        <UserContext.Provider value={[user, setUser]}>
+          <Switch>
+            <Route path="/" exact>
+              <Main />
+            </Route>
+            <Route path="/login" exact>
+              <Login />
+            </Route>
+            <Route path="/signup" exact>
+              <SignUp />
+            </Route>
+            <Route path="/post/:id" exact>
+              <Post />
+            </Route>
+            <Route path="/user/:id" exact>
+              <User />
+            </Route>
+            <Route path="/logout" exact>
+              <Logout />
+            </Route>
+            <Route path="/newPost" exact>
+              <NewPost />
+            </Route>
+            <Route path="/forgot-password" exact>
+              <ForgotPassword />
+            </Route>
+          </Switch>
+        </UserContext.Provider>
+      </div>
+    </BrowserRouter>
+```
+
 ## 7. Sessions in express
 
 User sessions are managed using the 'express-session' package. This package stores a cookie in the user's browser to keep track of a user's session. This package was set up as follows:
@@ -208,5 +244,5 @@ transporter.sendMail(mailOptions, function(error, info){
 
 ## 9. SQL setup
 
-## 10. ...idk? Anything else we can cover?
+## 10. TypeScipt
 
