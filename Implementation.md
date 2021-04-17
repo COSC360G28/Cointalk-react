@@ -94,6 +94,25 @@ app.get('/test-database', (_, res) => {
 
 ## 4. Using multer for storing images to the uploads folder
 
+The Node.js Multer library was used for image uploading. The implementation of multer can be found in multer.ts, though a snippet looks like:
+
+```
+import multer from 'multer';
+import path from 'path';
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+        cb(null, `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`);
+    },
+});
+
+```
+Multer is the package that allows user to upload images to their profile, or to their post. From here, we can see the pictures will be stored in 'uploads' folder with their image being the relative path.
+
+
 ## 5. Axios for AJAX
 
 Axios was used to handle the AJAX portion of our web application. A basic Axio implementation is:
