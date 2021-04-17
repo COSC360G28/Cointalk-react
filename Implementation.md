@@ -22,7 +22,9 @@ SCSS is utilized to use advanced styling choices that CSS may not provide.
 
 ## 7. Sessions in express
 
-## 8. Password reset
+## 8. Recovery Email
+
+The 'nodemailer' package was used to to send recovery emails. This allows package allows for creation of a Transport object with an emailing service provider (eg. gmail), a username, and a password. This Transport object will then be able to login to that email account. Using the Transport object emails can be sent to the users emails in order to recover their account.
 
 ## 9. SQL setup
 
